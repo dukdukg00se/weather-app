@@ -5,11 +5,141 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather App</title>
+    <link href="reset.css" rel="stylesheet" />
     <link href="styles.css" rel="stylesheet" />
+    <script src="main.js" defer></script>
   </head>
   <body>
-    <h1>Testing</h1>
-    <div id="content">Test div</div>
-    <script src="main.js"></script>
+    <main>
+      <section id="summary">
+
+        <header id="sum-header">
+          
+          <div>
+            <h1 class="locatn" id="sum-city">Irvine, CA</h1>
+            <span id="sum-time">As of 3:16 pm PDT</span>
+          </div>
+
+          <div>
+            <div id="search-box">
+              <label for="search">Search</label>
+              <input id="search" type="text" placeholder="Search" />
+              <img src="../src/modules/detailed/images/magnify-glass.svg" />
+            </div>
+          </div>
+
+          <div id="units">
+            <span class="set">°F</span>
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+            <span>°C</span>
+          </div>
+
+
+          <!-- <div id="units">
+            °F
+            <span id="arrow">
+
+            </span>
+          </div> -->
+
+        </header>
+
+        <div id="sum-body">
+          <div>
+            <h2>85°</h2>
+            <div>Fair</div>
+            <div>High 87° / Low 57°</div>
+          </div>
+          <div>
+            <img
+              id="sum-img"
+              src="../src/modules/detailed/images/sun.svg"
+            />
+          </div>
+        </div>
+
+      </section>
+
+      <section id="detailed">
+
+        <header id="det-header">
+          <h2>Weather today in <span class="locatn">Irvine, CA</span></h2>
+        </header>
+        
+        <div>
+          <div id="det-body-top">
+            <div>Feels Like <span id="feels-value">85°</span></div>
+
+            <div>
+              <div id="sunrise-value">
+                <img class="sun-icon"
+                  src="../src/modules/detailed/images/sunrise-fill.svg"
+                /><span> 6:45 am</span>
+              </div>
+              <div id="sunset-value">
+                <img class="sun-icon" src="../src/modules/detailed/images/sunset-fill.svg" />
+                <span> 6:37 pm</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="det-body-bottom">
+
+            <ul>
+
+              <li>
+                <img class="weather-icon" src="../src/modules/detailed/images/thermo.svg">
+                <div class="li-descr">
+                  High / Low
+                </div>
+                <div class="li-value" id="hl-value">
+                  87 / 57
+                </div>
+
+              </li>
+
+              <li>
+                <img class="weather-icon" src="../src/modules/detailed/images/wind.svg">
+                <div class="li-descr">
+                  Wind
+                </div>
+                <div class="li-value" id="wind-value">
+                  3 mph
+                </div>
+
+              </li>
+
+              <li>
+                <img class="weather-icon" src="../src/modules/detailed/images/humidity.svg">
+                <div class="li-descr">
+                  Humidity
+                </div>
+                <div class="li-value" id="humid-value">
+                  57%
+                </div>
+
+              </li>
+
+              <li>
+                <img class="weather-icon" id="press" src="../src/modules/detailed/images/pressure.svg">
+                <div class="li-descr">
+                  Pressure
+                </div>
+                <div class="li-value" id="press-value">
+                  29.96 in
+                </div>
+
+              </li>
+
+            </ul>
+
+          </div>
+        </div>
+      
+      </section>
+    </main>
   </body>
 </html>
