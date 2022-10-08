@@ -173,7 +173,7 @@ label[for='search-input'] {
 
 /* Search input box */
 #search-input {
-  padding: 0.5rem 0 0.5rem 1rem;
+  padding: 0.5rem 3.8rem 0.5rem 1rem;
   border-radius: 20px;
   border: none;
   background-color: rgba(255, 255, 255, 0.5);
