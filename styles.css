@@ -173,7 +173,7 @@ label[for='search-input'] {
 
 /* Search input box */
 #search-input {
-  padding: 0.5rem 3.8rem 0.5rem 1rem;
+  padding: 0.5rem 3.9rem 0.5rem 1rem;
   border-radius: 20px;
   border: none;
   background-color: rgba(255, 255, 255, 0.5);
@@ -182,7 +182,7 @@ label[for='search-input'] {
   width: 100%;
 }
 
-input::placeholder {
+#search-input::placeholder {
   color: rgb(214, 214, 214);
   opacity: 1;
   font-size: 1.8rem;
