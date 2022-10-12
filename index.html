@@ -10,13 +10,15 @@
     <link href="../src/modules/detailed/images/cloudy-day.svg" rel="icon">
     <script src="main.js" defer></script>
   </head>
+
   <body>
     <main>
       <section id="summary">
         <header id="sum-header">
           <div>
-            <h1 class="locatn" id="sum-city">Irvine, CA</h1>
-            <span id="sum-time">As of 3:16 pm PDT</span>
+            <h1 class="city" id="sum-city">Irvine, CA</h1>
+            <span id="state-country">New South Wales, US</span>
+            As of <span id="data-time">3:16 pm PDT</span>
           </div>
 
           <div>
@@ -38,12 +40,12 @@
             <div>High 87° / Low 57°</div>
 
             <div id="units">
-              <span class="set">F</span>
-              <label class="switch">
-                <input type="checkbox" />
+              <span id="faren" class="set">F</span>
+              <label for="select-units" class="switch">
+                <input id="select-units" type="checkbox" value="imperial"/>
                 <span class="slider"></span>
               </label>
-              <span>C</span>
+              <span id="cels">C</span>
             </div>
           </div>
 
@@ -56,7 +58,7 @@
 
       <section id="detailed">
         <header id="det-header">
-          <h2>Weather today in <span class="locatn">Irvine, CA</span></h2>
+          <h2>Weather today in <span class="city">Irvine, CA</span></h2>
         </header>
 
         <div>
@@ -105,7 +107,7 @@
                   src="../src/modules/detailed/images/wind.svg"
                 />
                 <div class="li-descr">Wind</div>
-                <div class="li-value" id="wind-value">3 mph</div>
+                <div class="li-value" id="wind-value"><img id="wind-dir" src="../src/modules/detailed/images/wind-dir.svg" alt="arrow indicating wind direction">3 mph</div>
               </li>
 
               <li>
