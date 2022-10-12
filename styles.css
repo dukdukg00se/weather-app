@@ -10,6 +10,11 @@ html {
   font-size: 62.5%;
   --text-color-light: white;
   --section-color-dark: black;
+  --early-sun-bkgrnd-color: #4fafbc;
+  --late-sun-bkgrnd-color: #0c8dc0;
+  --rain-bkgrnd-color: #2f97b4;
+  --snow-bkgrnd-color: #4177a2;
+  --night-bkgrnd-color: #143d86;
 }
 
 body {
@@ -33,11 +38,13 @@ body {
 main {
   min-width: 26rem;
   max-width: 55rem;
+  background-color: #12438b;
+  border-radius: 5px;
 }
 
 main section {
   background-color: rgba(0, 0, 0, 0.65);
-  border-radius: 5px;
+  /* border-radius: 5px; */
   margin: 10px;
 }
 
@@ -153,6 +160,11 @@ input:checked + .slider:before {
 
 h1 {
   font-size: 2.6rem;
+  margin-bottom: 0.5rem;
+}
+
+h1 + span {
+  display: block;
   margin-bottom: 0.5rem;
 }
 
@@ -293,6 +305,12 @@ label[for='search-input'] {
 .li-descr {
   flex-grow: 1;
   min-width: 55%;
+}
+
+#wind-dir {
+  height: 1.6rem;
+  width: 1.2rem;
+  margin: 0 1rem -.1rem 0;
 }
 
 @media (max-width: 475px), (max-height: 650px) {
