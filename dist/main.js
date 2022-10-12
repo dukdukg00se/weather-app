@@ -129,9 +129,22 @@ function displayDataCollectTime(obj) {
 function popWeatherInfo(obj) {
   console.log(obj);
 
+  const temp = document.querySelector('#sum-body h2');
+  const tempHigh = document.getElementById('temp-high');
+  const tempLow = document.getElementById('temp-low');
+  const description = document.getElementById('descr');
+
+  temp.textContent = Math.round(obj.main.temp) + '°';
+  tempHigh.textContent = Math.round(obj.main.temp_max);
+  tempLow.textContent = Math.round(obj.main.temp_min);
+  description.textContent = obj.weather[0].description.replace(/(\b[a-z](?!\s))/g, (firstLetter) => firstLetter.toUpperCase());
+
 }
 
-
+// regex to capitalize first letter of each word
+var re = /(\b[a-z](?!\s))/g;
+var s = "fort collins, croton-on-hudson, harper's ferry, coeur d'alene, o'fallon"; 
+s = s.replace(re, function(x){return x.toUpperCase();});
 
 
 
