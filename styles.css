@@ -10,11 +10,14 @@ html {
   font-size: 62.5%;
   --text-color-light: white;
   --section-color-dark: black;
-  --early-sun-bkgrnd-color: #4fafbc;
-  --late-sun-bkgrnd-color: #0c8dc0;
-  --rain-bkgrnd-color: #2f97b4;
-  --snow-bkgrnd-color: #4177a2;
-  --night-bkgrnd-color: #143d86;
+  --bc-d-bkgrnd: #87c4eb;
+  --sunny-bkgrnd: #0c8dc0;
+  --night-bkgrnd: #143d86;
+  --rainy-d-bkgrnd: #9ab4d1;
+  --rainy-n-bkgrnd: #415f7f;
+  --snowy-d-bkgrnd: #8bbee6;
+  --snowy-n-bkgrnd: #2f1463;
+  --sand-bkgrnd: #a8654a;
 }
 
 body {
@@ -221,8 +224,10 @@ label[for='search-input'] {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 30%;
+  width: 45%;
+  align-self: center;
   align-items: center;
+  text-align: center;
   gap: 1rem;
 }
 
@@ -230,7 +235,7 @@ label[for='search-input'] {
   margin: 0.3rem 0 0 0;
 }
 
-#sum-img {
+#descr-img {
   height: auto;
   width: 100%;
   max-width: 10rem;
