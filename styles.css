@@ -231,9 +231,15 @@ label[for='search-input'] {
   gap: 1rem;
 }
 
-#sum-body > div > div:first-of-type {
-  margin: 0.3rem 0 0 0;
+#temp {
+  display: block;
+  font-size: 7.2rem;
+  margin-top: .2rem;
 }
+
+/* #sum-body > div > div:first-of-type {
+  margin: 0.3rem 0 0 0;
+} */
 
 #descr-img {
   height: auto;
