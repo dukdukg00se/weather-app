@@ -7,7 +7,7 @@
     <title>Weather App</title>
     <link href="reset.css" rel="stylesheet" />
     <link href="styles.css" rel="stylesheet" />
-    <link href="../src/modules/detailed/images/cloudy-day.svg" rel="icon">
+    <link href="../src/modules/detailed/images/cloudy-day.svg" rel="icon" />
     <script src="main.js" defer></script>
   </head>
 
@@ -16,15 +16,20 @@
       <section id="summary">
         <header id="sum-header">
           <div>
-            <h1 class="city" id="sum-city">Irvine, CA</h1>
-            <span id="state-country">New South Wales, US</span>
-            As of <span id="data-time">3:16 pm PDT</span>
+            <h1 class="city" id="sum-city">Irvine</h1>
+            <span id="state-country">California, US</span>
+            As of <span id="data-time">10/12/2022, 3:16:01 PM</span>
           </div>
 
           <div>
             <div id="search-box">
               <label for="search-input">Search</label>
-              <input id="search-input" type="text" placeholder="Search City or Zip" autocomplete="off"/>
+              <input
+                id="search-input"
+                type="text"
+                placeholder="Search City or Zip"
+                autocomplete="off"
+              />
               <img
                 id="search"
                 src="../src/modules/detailed/images/magnify-glass.svg"
@@ -37,12 +42,15 @@
           <div>
             <h2>85°</h2>
 
-            <div>High <span id="temp-high">87</span>° / Low <span id="temp-low">57</span>°</div>
+            <div>
+              High <span id="temp-high">87</span>° / Low
+              <span id="temp-low">57</span>°
+            </div>
 
             <div id="units">
               <span id="faren" class="set">F</span>
               <label for="select-units" class="switch">
-                <input id="select-units" type="checkbox" value="imperial"/>
+                <input id="select-units" type="checkbox" value="imperial" />
                 <span class="slider"></span>
               </label>
               <span id="cels">C</span>
@@ -50,8 +58,13 @@
           </div>
 
           <div>
-            <img id="sum-img" src="../src/modules/detailed/images/rainy.svg" alt=""/>
-            <div id="descr">Light Rain</div>
+            <img
+              id="descr-img"
+              src="../src/modules/detailed/images/sun.svg"
+              alt=""
+            />
+
+            <div id="descr">Clear Sky</div>
           </div>
         </div>
       </section>
@@ -107,7 +120,13 @@
                   src="../src/modules/detailed/images/wind.svg"
                 />
                 <div class="li-descr">Wind</div>
-                <div class="li-value" id="wind-value"><img id="wind-dir" src="../src/modules/detailed/images/wind-dir.svg" alt="arrow indicating wind direction">3 mph</div>
+                <div class="li-value" id="wind-value">
+                  <img
+                    id="wind-dir"
+                    src="../src/modules/detailed/images/wind-dir.svg"
+                    alt="arrow indicating wind direction"
+                  />3 mph
+                </div>
               </li>
 
               <li>
