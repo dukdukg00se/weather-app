@@ -1,3 +1,5 @@
+'use strict';
+
 const bCD = '../src/modules/bkgrnd/images/broken-clouds-d.svg';
 const bCN = '../src/modules/bkgrnd/images/broken-clouds-n.svg';
 const clearD = '../src/modules/bkgrnd/images/clear-d.svg';
@@ -12,10 +14,17 @@ const snowyN = '../src/modules/bkgrnd/images/snowy-n.svg';
 
 const searchBox = document.getElementById('search-input');
 const search = document.getElementById('search');
-let area;
+let area = 90210;
 let units = 'imperial';
 
-setTheme();
+const unitInput = document.getElementById('unit-input');
+
+
+// setTheme();
+showCurrent();
+
+
+unitInput.addEventListener('click', changeUnit);
 
 searchBox.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
@@ -30,6 +39,19 @@ search.addEventListener('click', () => {
   area = searchBox.value;
   searchBox.value = '';
 });
+
+
+function changeUnit() {
+  const imperial = document.getElementById('imperial');
+  const metric = document.getElementById('metric');
+
+  imperial.classList.toggle('set');
+  metric.classList.toggle('set');
+  units = imperial.classList.contains('set') ? 'imperial' : 'metric';
+}
+
+
+
 
 function showCurrent() {
   let isZip = /\d/g.test(area);
@@ -74,11 +96,50 @@ function showCurrent() {
       getGeoCoord(reqInfo);
       displayDataTime(reqInfo);
       popWeatherInfo(reqInfo);
+      getLocalTimeZone(reqInfo);
+
+
     })
-    .catch(() => {
+    .catch((response) => {
       console.log('No');
+      console.log(response);
     });
 }
+
+// Use TimeZoneDB RESTful API to get timezone abbreviation
+// Open Weather One Call API requires CC info
+function getLocalTimeZone(obj) {
+  let latitude = obj.coord.lat;
+  let longitude = obj.coord.lon; 
+
+  fetch(
+    `https://api.timezonedb.com/v2.1/get-time-zone?key=P0O68OWY0HTK&format=json&by=position&lat=${latitude}&lng=${longitude}`,
+    { mode: 'cors' }
+  )
+    .then((response) => {
+      if (!response.ok) {
+        return response.ok;
+      }
+
+      return response.json();
+    })
+    .then((response) => {
+      if (!response) {
+        console.log('Some error');
+        return;
+      }
+
+      const timeZoneAbbrev = document.getElementById('data-zone');
+      timeZoneAbbrev.textContent = ` ${response.abbreviation}`
+
+    })
+    .catch(() => {
+      console.log('caught something');
+    });
+}
+
+
+
 
 function getGeoCoord(obj) {
   let lat = obj.coord.lat;
@@ -122,35 +183,79 @@ function displayLocation(obj) {
 }
 
 function displayDataTime(obj) {
-  // Use this function for now
-  // Use data-fns later
-  function epochToHRDate(obj) {
-    let epochDate = obj.dt;
-    let myDate = new Date(epochDate * 1000);
-    return myDate.toLocaleString();
-  }
-
+  // let currentDate = obj.dt;
   const time = document.getElementById('data-time');
-  time.textContent = epochToHRDate(obj);
+
+  // time.textContent = unixToHRDate(currentDate);
+  time.textContent = `${epochToHRTime(obj.dt, obj.timezone)}`;
+
+}
+
+// Use this function for now
+// Use data-fns later
+function unixToHRDate(ut) {
+  let myDate = new Date(ut * 1000);
+
+  // return myDate.toLocaleString([], {timezone: 'UTC'});
+
+  return myDate.toLocaleString([], {
+    year: '2-digit',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+
+  });
+}
+
+function epochToHRTime(time, zone) {
+  let myDate = new Date(time * 1000);
+  let localTime = myDate.getTime(); // milliseconds since 1/1/70, 00:00:00.000 GMT
+  let localOffset = myDate.getTimezoneOffset() * 60000;
+  let utc = localTime + localOffset;
+  let city = utc + 1000 * zone;
+  let destinTime = new Date(city);
+
+  // return hRTime.toLocaleString('en-US', 'hour12: true');
+  // return time.toLocaleString('en-GB', {hour12: 'false'});
+  return destinTime.toLocaleString([], { hour: 'numeric', minute: 'numeric' });
 }
 
 function popWeatherInfo(obj) {
   console.log(obj);
 
-  const temp = document.querySelector('#sum-body h2');
-  const tempHigh = document.getElementById('temp-high');
-  const tempLow = document.getElementById('temp-low');
+  const regexFL = /(\b[a-z](?!\s))/g;
+  const timezone = obj.timezone;
+  const sunriseEpoch = obj.sys.sunrise;
+  const sunsetEpoch = obj.sys.sunset;
+
+  const temp = document.querySelector('#temp');
   const description = document.getElementById('descr');
   const descrImg = document.getElementById('descr-img');
+  const feels = document.getElementById('feels');
+  const sunrise = document.getElementById('sunrise');
+  const sunset = document.getElementById('sunset');
+  const maxMin = document.getElementById('max-min');
+  const windDir = document.getElementById('wind-dir');
+  const wind = document.getElementById('wind');
+  const humidity = document.getElementById('humidity');
+  const pressure = document.getElementById('pressure');
+
 
   temp.textContent = Math.round(obj.main.temp) + '°';
-  tempHigh.textContent = Math.round(obj.main.temp_max);
-  tempLow.textContent = Math.round(obj.main.temp_min);
-  description.textContent = obj.weather[0].description.replace(
-    /(\b[a-z](?!\s))/g,
-    (firstLetter) => firstLetter.toUpperCase()
+  description.textContent = obj.weather[0].description.replace(regexFL, (fl) =>
+    fl.toUpperCase()
   );
   descrImg.src = selectImg(obj);
+  feels.textContent = Math.round(obj.main.feels_like) + '°';
+  sunrise.textContent = epochToHRTime(sunriseEpoch, timezone);
+  sunset.textContent = epochToHRTime(sunsetEpoch, timezone);
+  maxMin.textContent = `${Math.round(obj.main.temp_max)}° / ${Math.round(obj.main.temp_min)}°`;
+  windDir.style.transform = `rotate(${obj.wind.deg}deg)`;
+  wind.textContent = (units === 'imperial') ? Math.round(obj.wind.speed) + ' mph' : Math.round((obj.wind.speed * 3600) / 1000) + ' km/h';
+  humidity.textContent = obj.main.humidity + '%';
+  pressure.textContent = obj.main.pressure + ' hPa';
+
 }
 
 function selectImg(obj) {
@@ -252,7 +357,7 @@ function setTheme(obj) {
     case '13n':
       wallPaper = snowyN;
       wallColor = 'var(--snowy-n-bkgrnd)';
-      break;    
+      break;
     case '50d':
     case '50n':
       wallPaper = sand;
@@ -269,17 +374,8 @@ function setTheme(obj) {
 
 
 
-const selectUnits = document.getElementById('select-units');
-const farenUnit = document.getElementById('faren');
-const celsUnit = document.getElementById('cels');
 
-selectUnits.addEventListener('click', () => {
-  farenUnit.classList.toggle('set');
-  celsUnit.classList.toggle('set');
 
-  units = farenUnit.classList.contains('set') ? 'imperial' : 'metric';
-  console.log(units);
-});
 
 
 // regex to capitalize first letter of each word
