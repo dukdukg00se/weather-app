@@ -18,7 +18,8 @@
           <div>
             <h1 class="city" id="sum-city">Irvine</h1>
             <span id="state-country">California, US</span>
-            As of <span id="data-time">10/12/2022, 3:16:01 PM</span>
+            As of <span id="data-time">3:16 PM PDT</span
+            ><span id="data-zone"></span>
           </div>
 
           <div>
@@ -33,6 +34,8 @@
               <img
                 id="search"
                 src="../src/modules/detailed/images/magnify-glass.svg"
+                alt="Magnifying glass icon"
+                title="Search"
               />
             </div>
           </div>
@@ -42,18 +45,13 @@
           <div>
             <div>Temperature<span id="temp">85°</span></div>
 
-            <!-- <div>
-              High <span id="temp-high">87</span>° / Low
-              <span id="temp-low">57</span>°
-            </div> -->
-
-            <div id="units">
-              <span id="faren" class="set">F</span>
-              <label for="select-units" class="switch">
-                <input id="select-units" type="checkbox" value="imperial" />
+            <div id="units-wrapper">
+              <span id="imperial" class="set">F</span>
+              <label for="unit-input" class="switch">
+                <input id="unit-input" type="checkbox" />
                 <span class="slider"></span>
               </label>
-              <span id="cels">C</span>
+              <span id="metric">C</span>
             </div>
           </div>
 
@@ -76,7 +74,7 @@
 
         <div>
           <div id="det-body-top">
-            <div>Feels Like<span id="feels-value">85°</span></div>
+            <div>Feels Like<span id="feels">85°</span></div>
 
             <div>
               <div>
@@ -84,10 +82,12 @@
                   <img
                     class="sun-icon"
                     src="../src/modules/detailed/images/sunrise-fill.svg"
+                    alt="Sunrise icon"
+                    title="Sunrise"
                   />
                   Sunrise:
                 </div>
-                <span id="sunrise-value">6:45 am</span>
+                <span id="sunrise">6:45 am</span>
               </div>
 
               <div>
@@ -95,10 +95,12 @@
                   <img
                     class="sun-icon"
                     src="../src/modules/detailed/images/sunset-fill.svg"
+                    alt="Sunset Icon"
+                    title="Sunset"
                   />
                   Sunset:
                 </div>
-                <span id="sunset-value">6:37 pm</span>
+                <span id="sunset">6:37 pm</span>
               </div>
             </div>
           </div>
@@ -109,23 +111,29 @@
                 <img
                   class="weather-icon"
                   src="../src/modules/detailed/images/thermo.svg"
+                  alt="Thermometer icon"
+                  title="Max/min temperature"
                 />
-                <div class="li-descr">High / Low</div>
-                <div class="li-value" id="hl-value">87 / 57</div>
+                <div class="li-descr">Max / Min</div>
+                <div id="max-min">87° / 57°</div>
               </li>
 
               <li>
                 <img
                   class="weather-icon"
                   src="../src/modules/detailed/images/wind.svg"
+                  alt="Wind icon"
+                  title="Wind speed and direction"
                 />
                 <div class="li-descr">Wind</div>
-                <div class="li-value" id="wind-value">
+                <div>
                   <img
                     id="wind-dir"
                     src="../src/modules/detailed/images/wind-dir.svg"
-                    alt="arrow indicating wind direction"
-                  />3 mph
+                    alt="Arrow showing wind direction"
+                    title=""
+                  />
+                  <span id="wind">3 mph</span>
                 </div>
               </li>
 
@@ -133,19 +141,22 @@
                 <img
                   class="weather-icon"
                   src="../src/modules/detailed/images/humidity.svg"
+                  alt="Humidity icon"
+                  title="Humidity"
                 />
                 <div class="li-descr">Humidity</div>
-                <div class="li-value" id="humid-value">57%</div>
+                <div id="humidity">57%</div>
               </li>
 
               <li>
                 <img
                   class="weather-icon"
-                  id="press"
                   src="../src/modules/detailed/images/pressure.svg"
+                  alt="Pressure icon"
+                  title="Pressure"
                 />
                 <div class="li-descr">Pressure</div>
-                <div class="li-value" id="press-value">29.96 in</div>
+                <div id="pressure">999 hPa</div>
               </li>
             </ul>
           </div>
