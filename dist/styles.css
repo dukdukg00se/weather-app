@@ -8,8 +8,8 @@ html {
 
 html {
   font-size: 62.5%;
-  --text-color-light: white;
-  --section-color-dark: black;
+  --light-text: white;
+  --dark-bkgrnd: black;
   --bc-d-bkgrnd: #87c4eb;
   --sunny-bkgrnd: #0c8dc0;
   --night-bkgrnd: #143d86;
@@ -17,7 +17,7 @@ html {
   --rainy-n-bkgrnd: #415f7f;
   --snowy-d-bkgrnd: #8bbee6;
   --snowy-n-bkgrnd: #2f1463;
-  --sand-bkgrnd: #a8654a;
+  --sand-bkgrnd: #68382d;
 }
 
 body {
@@ -31,7 +31,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: var(--text-color-light);
+  color: var(--light-text);
   font-family: sans-serif;
   contain: content;
   min-width: 275px;
@@ -39,21 +39,20 @@ body {
 }
 
 main {
-  min-width: 26rem;
-  max-width: 55rem;
+  min-width: 27rem;
+  max-width: 56rem;
   background-color: #12438b;
   border-radius: 5px;
 }
 
 main section {
   background-color: rgba(0, 0, 0, 0.65);
-  /* border-radius: 5px; */
-  margin: 10px;
+  margin: 1rem;
 }
 
 #sum-header {
   padding: 2rem;
-  background-color: var(--section-color-dark);
+  background-color: var(--dark-bkgrnd);
   border-radius: 5px 5px 0 0;
   display: flex;
   justify-content: space-between;
@@ -91,8 +90,7 @@ main section {
   cursor: pointer;
 }
 
-/* Switch units div */
-#units {
+#units-wrapper {
   display: flex;
   gap: 0.6rem;
   align-items: center;
@@ -101,11 +99,10 @@ main section {
 }
 
 .set {
-  font-size: 2.2rem;
+  font-size: 2.3rem;
   font-weight: 600;
 }
 
-/* The switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;
@@ -120,7 +117,6 @@ main section {
   height: 0;
 }
 
-/* The slider */
 .slider {
   position: absolute;
   cursor: pointer;
@@ -128,7 +124,7 @@ main section {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--text-color-light);
+  background-color: var(--light-text);
   -webkit-transition: 0.4s;
   transition: 0.4s;
   border-radius: 4px;
@@ -141,7 +137,7 @@ main section {
   width: 1.1rem;
   left: 0.4rem;
   bottom: 0.2rem;
-  background-color: var(--section-color-dark);
+  background-color: var(--dark-bkgrnd);
   -webkit-transition: 0.4s;
   transition: 0.4s;
   border-radius: 2px;
@@ -193,7 +189,7 @@ label[for='search-input'] {
   border: none;
   background-color: rgba(255, 255, 255, 0.5);
   font-size: 2rem;
-  color: var(--text-color-light);
+  color: var(--light-text);
   width: 100%;
 }
 
@@ -237,10 +233,6 @@ label[for='search-input'] {
   margin-top: .2rem;
 }
 
-/* #sum-body > div > div:first-of-type {
-  margin: 0.3rem 0 0 0;
-} */
-
 #descr-img {
   height: auto;
   width: 100%;
@@ -266,7 +258,7 @@ label[for='search-input'] {
   justify-content: space-between;
 }
 
-#feels-value {
+#feels {
   display: block;
   font-size: 7.2rem;
 }
