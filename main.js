@@ -12,50 +12,15 @@ const rainyN = '../src/modules/bkgrnd/images/rainy-n.svg';
 const snowyD = '../src/modules/bkgrnd/images/snowy-d.svg';
 const snowyN = '../src/modules/bkgrnd/images/snowy-n.svg';
 
-const searchBox = document.getElementById('search-input');
-const search = document.getElementById('search');
-let area = 90210;
+
 let units = 'imperial';
 
-const unitInput = document.getElementById('unit-input');
 
 
-// setTheme();
-showCurrent();
-
-
-unitInput.addEventListener('click', changeUnit);
-
-searchBox.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') {
-    area = searchBox.value;
-    searchBox.value = '';
-
-    showCurrent();
-  }
-});
-
-search.addEventListener('click', () => {
-  area = searchBox.value;
-  searchBox.value = '';
-});
-
-
-function changeUnit() {
-  const imperial = document.getElementById('imperial');
-  const metric = document.getElementById('metric');
-
-  imperial.classList.toggle('set');
-  metric.classList.toggle('set');
-  units = imperial.classList.contains('set') ? 'imperial' : 'metric';
-}
-
-
-
-
-function showCurrent() {
+async function getWeatherData(area = 90210) {
   let isZip = /\d/g.test(area);
   let query = isZip ? 'zip' : 'q';
+
 
   const filterData = ({
     coord,
@@ -68,50 +33,207 @@ function showCurrent() {
     wind,
   }) => ({ coord, dt, main, name, sys, timezone, weather, wind });
 
-  fetch(
-    `https://api.openweathermap.org/data/2.5/weather?${query}=${area}&APPID=0aea211463138f620add488578423899&units=${units}`,
-    { mode: 'cors' }
-  )
-    .then((response) => {
-      // console.log(response);
 
-      if (!response.ok) {
-        // throw new Error('WRONG');
-        // catchError(response);
+  const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?${query}=${area}&APPID=0aea211463138f620add488578423899&units=${units}`,
+  { mode: 'cors' });
 
-        return response.ok;
-      }
-
-      return response.json();
-    })
-    .then((response) => {
-      if (!response) {
-        console.log('nothing');
-        return;
-      }
-
-      let reqInfo = filterData(response);
-
-      setTheme(reqInfo);
-      getGeoCoord(reqInfo);
-      displayDataTime(reqInfo);
-      popWeatherInfo(reqInfo);
-      getLocalTimeZone(reqInfo);
+  const data = filterData(await response.json());
 
 
-    })
-    .catch((response) => {
-      console.log('No');
-      console.log(response);
-    });
+  return data;
+
+  // fetch(
+  //   `https://api.openweathermap.org/data/2.5/weather?${query}=${area}&APPID=0aea211463138f620add488578423899&units=${units}`,
+  //   { mode: 'cors' }
+  // )
+  //   .then((response) => {
+
+  //     return response.json();
+  //   })
+  //   .then((response) => {
+
+  //     test = response;
+  //     // console.log(test)
+  //     return response;
+
+  //   })
+  //   .catch(() => {
+  //     console.log('caught');
+
+  //   });
 }
 
-// Use TimeZoneDB RESTful API to get timezone abbreviation
-// Open Weather One Call API requires CC info
-function getLocalTimeZone(obj) {
-  let latitude = obj.coord.lat;
-  let longitude = obj.coord.lon; 
 
+
+async function initPage() {
+
+  let data = await getWeatherData();
+  console.log(data);
+
+}
+
+initPage();
+
+
+
+
+
+
+
+
+
+// activateSearch();
+
+
+// const unitInput = document.getElementById('unit-input');
+// unitInput.addEventListener('click', changeUnits);
+
+
+
+
+function activateSearch() {
+  const searchBox = document.getElementById('search-input');
+  const searchIcon = document.getElementById('search');
+  let inputArea;
+
+  searchBox.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && searchBox.value !== '') {
+      inputArea = searchBox.value;
+      getWeatherData(inputArea);
+      searchBox.value = '';
+    }
+  });
+
+  searchIcon.addEventListener('click', () => {
+    if (searchBox.value !== '') {
+      inputArea = searchBox.value;
+      getWeatherData(inputArea);
+      searchBox.value = '';
+    }
+  })
+}
+
+
+// function getWeatherData(area = 90210) {
+//   let isZip = /\d/g.test(area);
+//   let query = isZip ? 'zip' : 'q';
+
+//   const filterData = ({
+//     coord,
+//     dt,
+//     main,
+//     name,
+//     sys,
+//     timezone,
+//     weather,
+//     wind,
+//   }) => ({ coord, dt, main, name, sys, timezone, weather, wind });
+
+//   fetch(
+//     `https://api.openweathermap.org/data/2.5/weather?${query}=${area}&APPID=0aea211463138f620add488578423899&units=${units}`,
+//     { mode: 'cors' }
+//   )
+//     .then((response) => {
+//       console.log(response);
+
+//       // If HTTP error
+//       if (!response.ok) {
+//         throw new Error(response.ok);
+//       }
+
+//       return response.json();
+//     })
+//     .then((response) => {
+//       if (!response) {
+//         console.log(response);
+//         return response;
+//       }
+
+//       let reqInfo = filterData(response);
+
+
+//       setTheme(reqInfo);
+//       getGeoCoord(reqInfo);
+//       popWeatherData(reqInfo);
+//       getTimeZone(reqInfo);
+//       setWeatherIcon(reqInfo);
+//     })
+//     .catch((response) => {
+//       console.log(response);
+
+//     });
+// }
+
+
+
+// function searchWeatherInfo() {
+
+//   console.log(searchBox);
+
+//   // area = searchBox.value;
+//   // searchBox.value = '';
+
+//   // showCurrent();
+// }
+
+// function showCurrent() {
+//   let isZip = /\d/g.test(area);
+//   let query = isZip ? 'zip' : 'q';
+
+//   const filterData = ({
+//     coord,
+//     dt,
+//     main,
+//     name,
+//     sys,
+//     timezone,
+//     weather,
+//     wind,
+//   }) => ({ coord, dt, main, name, sys, timezone, weather, wind });
+
+//   fetch(
+//     `https://api.openweathermap.org/data/2.5/weather?${query}=${area}&APPID=0aea211463138f620add488578423899&units=${units}`,
+//     { mode: 'cors' }
+//   )
+//     .then((response) => {
+//       // console.log(response);
+
+//       if (!response.ok) {
+//         // throw new Error('WRONG');
+//         return response.ok;
+//       }
+
+//       return response.json();
+//     })
+//     .then((response) => {
+//       if (!response) {
+//         console.log(response);
+//         return response;
+//       }
+
+//       let reqInfo = filterData(response);
+
+//       setTheme(reqInfo);
+//       getGeoCoord(reqInfo);
+//       popWeatherData(reqInfo);
+//       getTimeZone(reqInfo);
+//       setWeatherIcon(reqInfo);
+//     })
+//     .catch((response) => {
+//       // console.log(response);
+//       // console.log(response)
+
+//     });
+// }
+
+
+
+function getTimeZone(obj) {
+  let latitude = obj.coord.lat;
+  let longitude = obj.coord.lon;
+
+  // Use TimeZoneDB RESTful API to get timezone abbreviation
+  // Open Weather One Call API requires CC info
   fetch(
     `https://api.timezonedb.com/v2.1/get-time-zone?key=P0O68OWY0HTK&format=json&by=position&lat=${latitude}&lng=${longitude}`,
     { mode: 'cors' }
@@ -130,16 +252,12 @@ function getLocalTimeZone(obj) {
       }
 
       const timeZoneAbbrev = document.getElementById('data-zone');
-      timeZoneAbbrev.textContent = ` ${response.abbreviation}`
-
+      timeZoneAbbrev.textContent = ` ${response.abbreviation}`;
     })
     .catch(() => {
       console.log('caught something');
     });
 }
-
-
-
 
 function getGeoCoord(obj) {
   let lat = obj.coord.lat;
@@ -169,6 +287,19 @@ function getGeoCoord(obj) {
       console.log('No');
     });
 }
+
+
+
+
+function changeUnits() {
+  const imperial = document.getElementById('imperial');
+  const metric = document.getElementById('metric');
+
+  imperial.classList.toggle('set');
+  metric.classList.toggle('set');
+  units = imperial.classList.contains('set') ? 'imperial' : 'metric';
+}
+
 function displayLocation(obj) {
   let city = document.querySelectorAll('.city');
   let stateCountry = document.getElementById('state-country');
@@ -182,56 +313,50 @@ function displayLocation(obj) {
     : obj.country;
 }
 
-function displayDataTime(obj) {
-  // let currentDate = obj.dt;
-  const time = document.getElementById('data-time');
+function getHRTime(time, zone) {
+  // Get date of unix timestamp
+  // Convert time (s) to ms
+  // Need to convert to ms for Date() constructor
+  // Output ex: Tue Oct 18 2022 14:34:05 GMT-0700 (Pacific Daylight Time)
+  let myDate = new Date(time * 1000);
 
-  // time.textContent = unixToHRDate(currentDate);
-  time.textContent = `${epochToHRTime(obj.dt, obj.timezone)}`;
+  // Get time since Unix epoch 1/1/70, 00:00:00.000 GMT (in ms)
+  let myTime = myDate.getTime();
 
-}
+  // Get difference between date in UTC time zone and local time zone (in min)
+  // Convert min to ms
+  let myOffset = myDate.getTimezoneOffset() * 60000;
 
-// Use this function for now
-// Use data-fns later
-function unixToHRDate(ut) {
-  let myDate = new Date(ut * 1000);
+  // Get unix timestamp
+  let myUT = myTime + myOffset;
 
-  // return myDate.toLocaleString([], {timezone: 'UTC'});
+  // Get target city unix timestamp
+  // Convert target timezone seconds to ms and add to myUT
+  let targetCityUT = myUT + 1000 * zone;
 
-  return myDate.toLocaleString([], {
-    year: '2-digit',
-    month: 'numeric',
-    day: 'numeric',
+  // Get human readable time
+  let destinTime = new Date(targetCityUT).toLocaleString([], {
     hour: 'numeric',
     minute: 'numeric',
-
   });
+
+  return destinTime;
 }
 
-function epochToHRTime(time, zone) {
-  let myDate = new Date(time * 1000);
-  let localTime = myDate.getTime(); // milliseconds since 1/1/70, 00:00:00.000 GMT
-  let localOffset = myDate.getTimezoneOffset() * 60000;
-  let utc = localTime + localOffset;
-  let city = utc + 1000 * zone;
-  let destinTime = new Date(city);
-
-  // return hRTime.toLocaleString('en-US', 'hour12: true');
-  // return time.toLocaleString('en-GB', {hour12: 'false'});
-  return destinTime.toLocaleString([], { hour: 'numeric', minute: 'numeric' });
-}
-
-function popWeatherInfo(obj) {
-  console.log(obj);
-
+function popWeatherData(obj) {
   const regexFL = /(\b[a-z](?!\s))/g;
   const timezone = obj.timezone;
   const sunriseEpoch = obj.sys.sunrise;
   const sunsetEpoch = obj.sys.sunset;
+  const current = obj.weather[0].description;
+  const maxTemp = Math.round(obj.main.temp_max);
+  const minTemp = Math.round(obj.main.temp_min);
 
+  // const city = document.querySelectorAll('.city');
+  // const stateCountry = document.getElementById('state-country');
+  const time = document.getElementById('data-time');
   const temp = document.querySelector('#temp');
   const description = document.getElementById('descr');
-  const descrImg = document.getElementById('descr-img');
   const feels = document.getElementById('feels');
   const sunrise = document.getElementById('sunrise');
   const sunset = document.getElementById('sunset');
@@ -241,69 +366,95 @@ function popWeatherInfo(obj) {
   const humidity = document.getElementById('humidity');
   const pressure = document.getElementById('pressure');
 
+  // city.forEach((header) => {
+  //   header.textContent = obj.name;
+  // });
+  // stateCountry.textContent = obj.state
+  //   ? `${obj.state}, ${obj.country}`
+  //   : obj.country;
+  wind.textContent =
+    units === 'imperial'
+      ? Math.round(obj.wind.speed) + ' mph'
+      : Math.round((obj.wind.speed * 3600) / 1000) + ' km/h';
 
+  time.textContent = getHRTime(obj.dt, obj.timezone);
   temp.textContent = Math.round(obj.main.temp) + '°';
-  description.textContent = obj.weather[0].description.replace(regexFL, (fl) =>
-    fl.toUpperCase()
-  );
-  descrImg.src = selectImg(obj);
+  description.textContent = current.replace(regexFL, (fl) => fl.toUpperCase());
   feels.textContent = Math.round(obj.main.feels_like) + '°';
-  sunrise.textContent = epochToHRTime(sunriseEpoch, timezone);
-  sunset.textContent = epochToHRTime(sunsetEpoch, timezone);
-  maxMin.textContent = `${Math.round(obj.main.temp_max)}° / ${Math.round(obj.main.temp_min)}°`;
+  sunrise.textContent = getHRTime(sunriseEpoch, timezone);
+  sunset.textContent = getHRTime(sunsetEpoch, timezone);
+  maxMin.textContent = `${maxTemp}° / ${minTemp}°`;
   windDir.style.transform = `rotate(${obj.wind.deg}deg)`;
-  wind.textContent = (units === 'imperial') ? Math.round(obj.wind.speed) + ' mph' : Math.round((obj.wind.speed * 3600) / 1000) + ' km/h';
   humidity.textContent = obj.main.humidity + '%';
   pressure.textContent = obj.main.pressure + ' hPa';
-
 }
 
-function selectImg(obj) {
+function setWeatherIcon(obj) {
   let imgCode = obj.weather[0].icon;
   let img;
+  let altText;
+  let titleText;
 
   switch (imgCode) {
     case '01d':
       img = '../src/modules/detailed/images/sun.svg';
+      altText = 'Sun';
+      titleText = 'Clear sky';
       break;
     case '01n':
       img = '../src/modules/detailed/images/moon.svg';
+      altText = 'Moon';
+      titleText = 'Clear sky';
       break;
     case '02d':
       img = '../src/modules/detailed/images/cloudy-day.svg';
+      altText = 'Sun with clouds';
+      titleText = 'Cloudy day';
       break;
     case '02n':
       img = '../src/modules/detailed/images/cloudy-night.svg';
+      altText = 'Moon with clouds';
+      titleText = 'Clear night';
       break;
     case '03d':
     case '03n':
     case '04d':
     case '04n':
       img = '../src/modules/detailed/images/cloudy.svg';
+      altText = 'Clouds';
+      titleText = 'Cloudy skies';
       break;
     case '09d':
     case '09n':
     case '10d':
     case '10n':
       img = '../src/modules/detailed/images/rainy.svg';
+      altText = 'Cloud and rain';
+      titleText = 'Rain';
       break;
     case '11d':
     case '11n':
       img = '../src/modules/detailed/images/lightning.svg';
+      altText = 'Cloud and lightning';
+      titleText = 'Thunderstorm';
       break;
     case '13d':
     case '13n':
       img = '../src/modules/detailed/images/snow.svg';
+      altText = 'Cloud and snow';
+      titleText = 'Snow';
       break;
     case '50d':
     case '50n':
       img = '../src/modules/detailed/images/mist.svg';
-      break;
-    default:
-      console.log('No Such Image');
+      altText = 'Mist';
+      titleText = 'Haze';
   }
 
-  return img;
+  const descrImg = document.getElementById('descr-img');
+  descrImg.src = img;
+  descrImg.alt = altText;
+  descrImg.title = titleText;
 }
 
 function setTheme(obj) {
@@ -314,58 +465,58 @@ function setTheme(obj) {
   switch (imgCode) {
     case '01d':
       wallPaper = clearD;
-      wallColor = 'var(--sunny-bkgrnd)';
+      wallColor = 'var(--sunny)';
       break;
     case '02d':
     case '03d':
       wallPaper = cloudyD;
-      wallColor = 'var(--sunny-bkgrnd)';
+      wallColor = 'var(--sunny)';
       break;
     case '04d':
       wallPaper = bCD;
-      wallColor = 'var(--bc-d-bkgrnd)';
+      wallColor = 'var(--broken-clouds)';
       break;
     case '01n':
       wallPaper = clearN;
-      wallColor = 'var(--night-bkgrnd)';
+      wallColor = 'var(--night)';
       break;
     case '02n':
     case '03n':
       wallPaper = cloudyN;
-      wallColor = 'var(--night-bkgrnd)';
+      wallColor = 'var(--night)';
       break;
     case '04n':
       wallPaper = bCN;
-      wallColor = 'var(--night-bkgrnd)';
+      wallColor = 'var(--night)';
       break;
     case '09d':
     case '10d':
     case '11d':
       wallPaper = rainyD;
-      wallColor = 'var(--rainy-d-bkgrnd)';
+      wallColor = 'var(--rainy-day)';
       break;
     case '09n':
     case '10n':
     case '11n':
       wallPaper = rainyN;
-      wallColor = 'var(--rainy-n-bkgrnd)';
+      wallColor = 'var(--rainy-night)';
       break;
     case '13d':
       wallPaper = snowyD;
-      wallColor = 'var(--snowy-d-bkgrnd)';
+      wallColor = 'var(--snowy-day)';
       break;
     case '13n':
       wallPaper = snowyN;
-      wallColor = 'var(--snowy-n-bkgrnd)';
+      wallColor = 'var(--snowy-night)';
       break;
     case '50d':
     case '50n':
       wallPaper = sand;
-      wallColor = 'var(--sand-bkgrnd)';
+      wallColor = 'var(--sand-mist)';
       break;
     default:
       wallPaper = clearD;
-      wallColor = 'var(--sunny-bkgrnd)';
+      wallColor = 'var(--sunny)';
   }
 
   document.body.style.backgroundImage = `url(${wallPaper})`;
@@ -385,3 +536,65 @@ var s =
 s = s.replace(re, function (x) {
   return x.toUpperCase();
 });
+
+// Use this function for now
+// Use data-fns later
+function unixToHRDate(ut) {
+  let myDate = new Date(ut * 1000);
+
+  return myDate.toLocaleString([], {
+    year: '2-digit',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
+}
+
+// function selectImg(obj) {
+//   let imgCode = obj.weather[0].icon;
+//   let img;
+
+//   switch (imgCode) {
+//     case '01d':
+//       img = '../src/modules/detailed/images/sun.svg';
+//       break;
+//     case '01n':
+//       img = '../src/modules/detailed/images/moon.svg';
+//       break;
+//     case '02d':
+//       img = '../src/modules/detailed/images/cloudy-day.svg';
+//       break;
+//     case '02n':
+//       img = '../src/modules/detailed/images/cloudy-night.svg';
+//       break;
+//     case '03d':
+//     case '03n':
+//     case '04d':
+//     case '04n':
+//       img = '../src/modules/detailed/images/cloudy.svg';
+//       break;
+//     case '09d':
+//     case '09n':
+//     case '10d':
+//     case '10n':
+//       img = '../src/modules/detailed/images/rainy.svg';
+//       break;
+//     case '11d':
+//     case '11n':
+//       img = '../src/modules/detailed/images/lightning.svg';
+//       break;
+//     case '13d':
+//     case '13n':
+//       img = '../src/modules/detailed/images/snow.svg';
+//       break;
+//     case '50d':
+//     case '50n':
+//       img = '../src/modules/detailed/images/mist.svg';
+//       break;
+//     default:
+//       console.log('No Such Image');
+//   }
+
+//   return img;
+// }
