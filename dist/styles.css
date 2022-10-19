@@ -10,14 +10,14 @@ html {
   font-size: 62.5%;
   --light-text: white;
   --dark-bkgrnd: black;
-  --bc-d-bkgrnd: #87c4eb;
-  --sunny-bkgrnd: #0c8dc0;
-  --night-bkgrnd: #143d86;
-  --rainy-d-bkgrnd: #9ab4d1;
-  --rainy-n-bkgrnd: #415f7f;
-  --snowy-d-bkgrnd: #8bbee6;
-  --snowy-n-bkgrnd: #2f1463;
-  --sand-bkgrnd: #68382d;
+  --broken-clouds: #87c4eb;
+  --sunny: #0c8dc0;
+  --night: #143d86;
+  --rainy-day: #9ab4d1;
+  --rainy-night: #415f7f;
+  --snowy-day: #8bbee6;
+  --snowy-night: #2f1463;
+  --sand-mist: #68382d;
 }
 
 body {
@@ -69,7 +69,46 @@ main section {
   justify-content: flex-end;
 }
 
-#search-box {
+#search-container {
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+}
+
+#search-params {
+  display: none;
+  position: absolute;
+  top: 43px;
+  background-color: black;
+  border: solid 2px white;
+  padding: 11px;
+  font-size: 13px;
+  border-radius: 5px;
+}
+
+/* Top arrow  */
+#search-params::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
+
+#search-params > ul {
+  list-style: disc;
+  margin: 8px 0 0 11px;
+}
+
+#search-params > ul > li {
+  margin-top: 3px;
+}
+
+#search-wrapper {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -79,14 +118,14 @@ main section {
   min-width: 12rem;
 }
 
-#search-box > img {
+#search-wrapper > img {
   height: 2.2rem;
   width: auto;
   position: absolute;
   right: 1rem;
 }
 
-#search-box > img:hover {
+#search-wrapper > img:hover {
   cursor: pointer;
 }
 
@@ -171,6 +210,8 @@ h1 + span {
   font-weight: 600;
 }
 
+/* Position label off screen but still visible for screen readers */
+/* https://stackoverflow.com/questions/40029976/how-to-hide-label-for-css */
 label[for='search-input'] {
   position: absolute !important;
   width: 1px !important;
@@ -182,7 +223,6 @@ label[for='search-input'] {
   border: 0 !important;
 }
 
-/* Search input box */
 #search-input {
   padding: 0.5rem 3.9rem 0.5rem 1rem;
   border-radius: 20px;
@@ -230,7 +270,7 @@ label[for='search-input'] {
 #temp {
   display: block;
   font-size: 7.2rem;
-  margin-top: .2rem;
+  margin-top: 0.2rem;
 }
 
 #descr-img {
@@ -313,7 +353,7 @@ label[for='search-input'] {
 #wind-dir {
   height: 1.6rem;
   width: 1.2rem;
-  margin: 0 1rem -.1rem 0;
+  margin: 0 1rem -0.1rem 0;
 }
 
 @media (max-width: 475px), (max-height: 650px) {
