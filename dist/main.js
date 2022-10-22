@@ -121,6 +121,37 @@ function setTheme(obj) {
   document.querySelector('main').style.backgroundColor = wallColor;
 }
 
+// Nested in displayWeatherData
+function getHRTime(time, zone) {
+  // Get date of unix timestamp
+  // Convert time (s) to ms
+  // Need to convert to ms for Date() constructor
+  // Output ex: Tue Oct 18 2022 14:34:05 GMT-0700 (Pacific Daylight Time)
+  let myDate = new Date(time * 1000);
+
+  // Get time since Unix epoch 1/1/70, 00:00:00.000 GMT (in ms)
+  let myTime = myDate.getTime();
+
+  // Get difference between date in UTC time zone and local time zone (in min)
+  // Convert min to ms
+  let myOffset = myDate.getTimezoneOffset() * 60000;
+
+  // Get unix timestamp
+  let myUT = myTime + myOffset;
+
+  // Get target city unix timestamp
+  // Convert target timezone seconds to ms and add to myUT
+  let targetCityUT = myUT + 1000 * zone;
+
+  // Get human readable time
+  let destinTime = new Date(targetCityUT).toLocaleString([], {
+    hour: 'numeric',
+    minute: 'numeric',
+  });
+
+  return destinTime;
+}
+
 // Nested in initPage(), displayAreWeather() -> in initPage()
 function displayWeatherIcon(obj) {
   let imgCode = obj.weather[0].icon;
@@ -252,26 +283,80 @@ async function getWeatherData(area = 90210) {
     wind,
   }) => ({ coord, dt, main, name, sys, timezone, weather, wind });
 
-  const response = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?${query}=${area}&APPID=0aea211463138f620add488578423899&units=${units}`,
-    { mode: 'cors' }
-  );
-  const data = filterData(await response.json());
+  // Instead of passing URL string, mode option 
+  // Use Request constructor to create new Request obj
+  // Pass Request obj to fetch w/ default options (e.g. mode: 'cors')
+  // Get weather info - doesn't include state, time zone abbr
+  let weatherRequest = new Request(`https://api.openweathermap.org/data/2.5/weather?${query}=${area}&APPID=0aea211463138f620add488578423899&units=${units}`);
+
+  const weatherResponse = await fetch(weatherRequest);
+  const weatherInfo = filterData(await weatherResponse.json());
+
+  // Get state name using second api call, limit responses to 1
+  let nameRequest = new Request(`https://api.openweathermap.org/geo/1.0/reverse?lat=${weatherInfo.coord.lat}&lon=${weatherInfo.coord.lon}&limit=1&appid=0aea211463138f620add488578423899`);
+
+  // Get timezone abbrev 
+  let tmZoneRequest = new Request(`https://api.timezonedb.com/v2.1/get-time-zone?key=P0O68OWY0HTK&format=json&by=position&lat=${weatherInfo.coord.lat}&lng=${weatherInfo.coord.lon}`);
+  
+  weatherInfo.extran = await Promise.all([fetch(nameRequest), fetch(tmZoneRequest)]).then((responses) => {
+    return Promise.all(responses.map((response => response.json())))
+  }).then(responses => {
+
+    // return { 
+    //   state: responses[0][0].state, 
+    //   timeZone: responses[1].abbreviation,
+    // };
+
+    let state = responses[0][0].state;
+    let timeZone = responses[1].abbreviation;
+
+    // Same as above
+    return { state, timeZone };    
+  })
+
+  console.log(weatherInfo)
 
 
-  // Get state name using second api call, rename to data.state
-  const response2 = await fetch(
-    `https://api.openweathermap.org/geo/1.0/reverse?lat=${data.coord.lat}&lon=${data.coord.lon}&limit=1&appid=0aea211463138f620add488578423899`,
-    { mode: 'cors' }
-  ).then((response) => response.json()).then((response) => response[0]);
 
-  // const data2 = await response2.json();
 
-  console.log(response2);
-  // console.log(data2);
-  // console.log(data, data2)
+  let weatherData = await fetch(weatherRequest).then((response) => {
+    if (!response.ok) return 'a';
 
-  return data;
+    return response.json();
+
+  }).then((response) => {
+    // if (!response.ok) {
+    //   console.log()
+    //   return response;
+    // }
+
+    return filterData(response);
+  
+  }).then((response) => {
+    // if (!response.ok) return response;
+
+    Promise.all([fetch(nameRequest), fetch(tmZoneRequest)]).then((responses) => {
+      return Promise.all(responses.map((response => response.json())))
+    }).then((moreData) => {
+      // console.log(moreData);
+      // console.log(moreData[0][0].state);
+      // console.log(moreData[1].abbreviation);
+
+      [response.state, response.tzabbr] = [moreData[0][0].state, moreData[1].abbreviation];
+    })
+
+    return response;
+  }).catch(response => {
+    console.log(response);
+    console.log('foo')
+  });
+
+
+  // console.log(weatherData)
+
+
+
+  return weatherInfo;
 
   // fetch(
   //   `https://api.openweathermap.org/data/2.5/weather?${query}=${area}&APPID=0aea211463138f620add488578423899&units=${units}`,
@@ -360,6 +445,9 @@ function getGeoCoord(obj) {
     });
 }
 
+
+
+
 function changeUnits() {
   const imperial = document.getElementById('imperial');
   const metric = document.getElementById('metric');
@@ -382,35 +470,7 @@ function displayLocation(obj) {
     : obj.country;
 }
 
-function getHRTime(time, zone) {
-  // Get date of unix timestamp
-  // Convert time (s) to ms
-  // Need to convert to ms for Date() constructor
-  // Output ex: Tue Oct 18 2022 14:34:05 GMT-0700 (Pacific Daylight Time)
-  let myDate = new Date(time * 1000);
 
-  // Get time since Unix epoch 1/1/70, 00:00:00.000 GMT (in ms)
-  let myTime = myDate.getTime();
-
-  // Get difference between date in UTC time zone and local time zone (in min)
-  // Convert min to ms
-  let myOffset = myDate.getTimezoneOffset() * 60000;
-
-  // Get unix timestamp
-  let myUT = myTime + myOffset;
-
-  // Get target city unix timestamp
-  // Convert target timezone seconds to ms and add to myUT
-  let targetCityUT = myUT + 1000 * zone;
-
-  // Get human readable time
-  let destinTime = new Date(targetCityUT).toLocaleString([], {
-    hour: 'numeric',
-    minute: 'numeric',
-  });
-
-  return destinTime;
-}
 
 
 
