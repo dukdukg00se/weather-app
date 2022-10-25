@@ -17,12 +17,19 @@ initPage();
 async function initPage() {
 
   let data = await getWeatherData();
+
+  logParams(data);
   setTheme(data);
   displayWeather(data);
+  listenForUserInput(data);
+}
 
+function logParams(obj) {
+  const main = document.querySelector('main');
+  const unitInput = document.getElementById('unit-input');
 
-  listenForUserInput();
-
+  main.dataset.search = obj.extran.search;
+  unitInput.value = obj.extran.units;
 }
 
 
@@ -33,37 +40,35 @@ function listenForUserInput() {
   const searchIcon = document.getElementById('search');
   const unitInput = document.getElementById('unit-input');
 
-  async function displayAreaWeather(e) {
-    let data;
-
-    if ((e.type === 'keypress' && e.key === 'Enter') || e.type === 'click') {
+  async function getAreaWeather(e) {
+    if (e.key === 'Enter' || e.type === 'click') {
       if (this.value === '') {
         return;
       }
+  
+      let conditions = await getWeatherData(this.value, unitInput.value);
 
-      data = await getWeatherData(this.value);
-      setTheme(data);
-      displayWeather(data);
-
+      logParams(conditions);
+      setTheme(conditions);
+      displayWeather(conditions);
     }
-
-
-
   }
 
-  searchBox.addEventListener('keypress', displayAreaWeather);
-  searchIcon.addEventListener('click', displayAreaWeather.bind(searchBox)); 
-  unitInput.addEventListener('click', () => {
-    console.log('ick')
-  })
+  async function updateUnits() {
+    const main = document.querySelector('main');
+    let userUnits = unitInput.value == 'imperial' ? 'metric' : 'imperial';
 
+    let conditions = await getWeatherData(main.dataset.search, userUnits);
 
-  
+    logParams(conditions);
+    setTheme(conditions);
+    displayWeather(conditions);
+  }
 
-
-
+  searchBox.addEventListener('keypress', getAreaWeather);
+  searchIcon.addEventListener('click', getAreaWeather.bind(searchBox)); 
+  unitInput.addEventListener('click', updateUnits);
 }
-
 
 
 // Nested in initPage(), displayAreWeather() -> in initPage()
@@ -133,7 +138,6 @@ function setTheme(obj) {
   document.querySelector('main').style.backgroundColor = wallColor;
 }
 
-
 // Nested in initPage(), listenForUserInput()
 async function getWeatherData(area = 90210, dispUnits = 'imperial') {
   let isZip = /\d/g.test(area);
@@ -169,7 +173,7 @@ async function getWeatherData(area = 90210, dispUnits = 'imperial') {
     // Open Weather OneCall API requires CC info
     let tmZoneRequest = new Request(`https://api.timezonedb.com/v2.1/get-time-zone?key=P0O68OWY0HTK&format=json&by=position&lat=${weatherInfo.coord.lat}&lng=${weatherInfo.coord.lon}`);
 
-    weatherInfo.units = dispUnits;
+
     weatherInfo.extran = await Promise.all([fetch(nameRequest), fetch(tmZoneRequest)]).then((responses) => {
       return Promise.all(responses.map((response => response.json())))
     }).then(responses => {
@@ -185,7 +189,10 @@ async function getWeatherData(area = 90210, dispUnits = 'imperial') {
       // Same as above
       return { state, timeZone };    
     })
+    weatherInfo.extran.search = area;
+    weatherInfo.extran.units = dispUnits;
 
+    console.log(weatherInfo)
     return weatherInfo;
 
   } catch {
@@ -194,13 +201,15 @@ async function getWeatherData(area = 90210, dispUnits = 'imperial') {
   }
 }
 
-
 // Nested in initPage(), displayAreWeather() -> in initPage()
 function displayWeather(obj) {
   const city = document.querySelectorAll('.city');
   const stateCountry = document.getElementById('state-country');
   const time = document.getElementById('data-time');
+  const timeZone = document.getElementById('data-zone');
   const temp = document.querySelector('#temp');
+  const imperial = document.getElementById('imperial');
+  const metric = document.getElementById('metric');
   const descrImg = document.getElementById('descr-img');
   const descrText = document.getElementById('descr');
   const feels = document.getElementById('feels');
@@ -220,7 +229,7 @@ function displayWeather(obj) {
   const maxTemp = Math.round(obj.main.temp_max);
   const minTemp = Math.round(obj.main.temp_min);
 
-  // Find icon for current weather and set alt text, title
+  // Find icon for current weather, init alt and title text
   let descrImgCode = obj.weather[0].icon;
   let img;
   let altText;
@@ -281,6 +290,17 @@ function displayWeather(obj) {
       titleText = 'Haze';
   }
 
+  // Highlight display units
+  switch(obj.extran.units) {
+    case 'imperial':
+      imperial.classList.add('set');
+      metric.classList.remove('set');
+      break;
+    case 'metric': 
+      imperial.classList.remove('set');
+      metric.classList.add('set');
+  }
+
   // Convert unix time to human readable time
   function getHRTime(time, zone) {
     // Get date of unix timestamp
@@ -314,6 +334,7 @@ function displayWeather(obj) {
 
   city.forEach((header) => (header.textContent = obj.name));
   time.textContent = getHRTime(obj.dt, obj.timezone);
+  timeZone.textContent = ` ${obj.extran.timeZone}`;
   temp.textContent = Math.round(obj.main.temp) + '°';
   descrImg.src = img;
   descrImg.alt = altText;
@@ -327,9 +348,9 @@ function displayWeather(obj) {
   humidity.textContent = obj.main.humidity + '%';
   pressure.textContent = obj.main.pressure + ' hPa';
 
-  stateCountry.textContent = obj.state
-    ? `${obj.state}, ${obj.country}`
-    : obj.country;
+  stateCountry.textContent = obj.extran.state
+    ? `${obj.extran.state}, ${obj.sys.country}`
+    : obj.sys.country;
 
   wind.textContent =
     obj.units === 'imperial'
@@ -337,28 +358,5 @@ function displayWeather(obj) {
       : Math.round((obj.wind.speed * 3600) / 1000) + ' km/h';
 
 }
-
-
-
-
-function displayUnits() {
-  const imperial = document.getElementById('imperial');
-  const metric = document.getElementById('metric');
-
-  units = imperial.classList.contains('set') ? 'imperial' : 'metric';
-  imperial.classList.toggle('set');
-  metric.classList.toggle('set');
-
-}
-
-
-
-
-
-
-
-
-
-
 
 
