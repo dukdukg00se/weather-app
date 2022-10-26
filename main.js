@@ -15,7 +15,6 @@ const snowyN = '../src/modules/bkgrnd/images/snowy-n.svg';
 initPage();
 
 async function initPage() {
-
   let data = await getWeatherData();
 
   logParams(data);
@@ -32,8 +31,6 @@ function logParams(obj) {
   unitInput.value = obj.extran.units;
 }
 
-
-
 // Nested in initPage()
 function listenForUserInput() {
   const searchBox = document.getElementById('search-input');
@@ -45,7 +42,7 @@ function listenForUserInput() {
       if (this.value === '') {
         return;
       }
-  
+
       let conditions = await getWeatherData(this.value, unitInput.value);
 
       logParams(conditions);
@@ -53,11 +50,9 @@ function listenForUserInput() {
       displayWeather(conditions);
     }
   }
-
   async function updateUnits() {
     const main = document.querySelector('main');
     let userUnits = unitInput.value == 'imperial' ? 'metric' : 'imperial';
-
     let conditions = await getWeatherData(main.dataset.search, userUnits);
 
     logParams(conditions);
@@ -66,12 +61,11 @@ function listenForUserInput() {
   }
 
   searchBox.addEventListener('keypress', getAreaWeather);
-  searchIcon.addEventListener('click', getAreaWeather.bind(searchBox)); 
+  searchIcon.addEventListener('click', getAreaWeather.bind(searchBox));
   unitInput.addEventListener('click', updateUnits);
 }
 
-
-// Nested in initPage(), displayAreWeather() -> in initPage()
+// Nested in initPage(), listenForUserInput()
 function setTheme(obj) {
   let imgCode = obj ? obj.weather[0].icon : {};
   let wallPaper;
@@ -159,7 +153,9 @@ async function getWeatherData(area = 90210, dispUnits = 'imperial') {
     // Use Request constructor to create new Request obj
     // Pass Request obj to fetch w/ default options (e.g. mode: 'cors')
     // Get weather info - doesn't include state, time zone abbr
-    let weatherRequest = new Request(`https://api.openweathermap.org/data/2.5/weather?${query}=${area}&APPID=0aea211463138f620add488578423899&units=${dispUnits}`);
+    let weatherRequest = new Request(
+      `https://api.openweathermap.org/data/2.5/weather?${query}=${area}&APPID=0aea211463138f620add488578423899&units=${dispUnits}`
+    );
 
     const weatherResponse = await fetch(weatherRequest);
     const weatherInfo = filterData(await weatherResponse.json());
@@ -167,46 +163,51 @@ async function getWeatherData(area = 90210, dispUnits = 'imperial') {
     // Get state name using second api call, limit responses to 1
     // Need to call openweather reverse geocoding api for state name
     // Current weather api only contains city name, country
-    let nameRequest = new Request(`https://api.openweathermap.org/geo/1.0/reverse?lat=${weatherInfo.coord.lat}&lon=${weatherInfo.coord.lon}&limit=1&appid=0aea211463138f620add488578423899`);
+    let nameRequest = new Request(
+      `https://api.openweathermap.org/geo/1.0/reverse?lat=${weatherInfo.coord.lat}&lon=${weatherInfo.coord.lon}&limit=1&appid=0aea211463138f620add488578423899`
+    );
 
     // Use TimeZoneDB RESTful API to get timezone abbreviation
     // Open Weather OneCall API requires CC info
-    let tmZoneRequest = new Request(`https://api.timezonedb.com/v2.1/get-time-zone?key=P0O68OWY0HTK&format=json&by=position&lat=${weatherInfo.coord.lat}&lng=${weatherInfo.coord.lon}`);
+    let tmZoneRequest = new Request(
+      `https://api.timezonedb.com/v2.1/get-time-zone?key=P0O68OWY0HTK&format=json&by=position&lat=${weatherInfo.coord.lat}&lng=${weatherInfo.coord.lon}`
+    );
 
+    weatherInfo.extran = await Promise.all([
+      fetch(nameRequest),
+      fetch(tmZoneRequest),
+    ])
+      .then((responses) => {
+        return Promise.all(responses.map((response) => response.json()));
+      })
+      .then((responses) => {
+        // return {
+        //   state: responses[0][0].state,
+        //   timeZone: responses[1].abbreviation,
+        // };
 
-    weatherInfo.extran = await Promise.all([fetch(nameRequest), fetch(tmZoneRequest)]).then((responses) => {
-      return Promise.all(responses.map((response => response.json())))
-    }).then(responses => {
+        let state = responses[0][0].state;
+        let timeZone = responses[1].abbreviation;
 
-      // return { 
-      //   state: responses[0][0].state, 
-      //   timeZone: responses[1].abbreviation,
-      // };
-
-      let state = responses[0][0].state;
-      let timeZone = responses[1].abbreviation;
-
-      // Same as above
-      return { state, timeZone };    
-    })
+        // Same as above
+        return { state, timeZone };
+      });
     weatherInfo.extran.search = area;
     weatherInfo.extran.units = dispUnits;
 
-    console.log(weatherInfo)
     return weatherInfo;
-
-  } catch {
-    console.log('oopas');
-
+  } catch (err) {
+    console.log(err);
   }
 }
 
-// Nested in initPage(), displayAreWeather() -> in initPage()
+// Nested in initPage(), listenForUserInput()
 function displayWeather(obj) {
   const city = document.querySelectorAll('.city');
   const stateCountry = document.getElementById('state-country');
   const time = document.getElementById('data-time');
   const timeZone = document.getElementById('data-zone');
+  const searchBox = document.getElementById('search-input');
   const temp = document.querySelector('#temp');
   const imperial = document.getElementById('imperial');
   const metric = document.getElementById('metric');
@@ -228,6 +229,37 @@ function displayWeather(obj) {
   const current = obj.weather[0].description;
   const maxTemp = Math.round(obj.main.temp_max);
   const minTemp = Math.round(obj.main.temp_min);
+
+  // Convert unix time to human readable time
+  const getHRTime = (time, zone) => {
+    // Get date of unix timestamp
+    // Convert time (s) to ms
+    // Need to convert to ms for Date() constructor
+    // Output ex: Tue Oct 18 2022 14:34:05 GMT-0700 (Pacific Daylight Time)
+    let myDate = new Date(time * 1000);
+
+    // Get time since Unix epoch 1/1/70, 00:00:00.000 GMT (in ms)
+    let myTime = myDate.getTime();
+
+    // Get difference between date in UTC time zone and local time zone (in min)
+    // Convert min to ms
+    let myOffset = myDate.getTimezoneOffset() * 60000;
+
+    // Get unix timestamp
+    let myUT = myTime + myOffset;
+
+    // Get target city unix timestamp
+    // Convert target timezone seconds to ms and add to myUT
+    let targetCityUT = myUT + 1000 * zone;
+
+    // Get human readable time
+    let destinTime = new Date(targetCityUT).toLocaleString([], {
+      hour: 'numeric',
+      minute: 'numeric',
+    });
+
+    return destinTime;
+  };
 
   // Find icon for current weather, init alt and title text
   let descrImgCode = obj.weather[0].icon;
@@ -291,50 +323,20 @@ function displayWeather(obj) {
   }
 
   // Highlight display units
-  switch(obj.extran.units) {
+  switch (obj.extran.units) {
     case 'imperial':
       imperial.classList.add('set');
       metric.classList.remove('set');
       break;
-    case 'metric': 
+    case 'metric':
       imperial.classList.remove('set');
       metric.classList.add('set');
-  }
-
-  // Convert unix time to human readable time
-  function getHRTime(time, zone) {
-    // Get date of unix timestamp
-    // Convert time (s) to ms
-    // Need to convert to ms for Date() constructor
-    // Output ex: Tue Oct 18 2022 14:34:05 GMT-0700 (Pacific Daylight Time)
-    let myDate = new Date(time * 1000);
-
-    // Get time since Unix epoch 1/1/70, 00:00:00.000 GMT (in ms)
-    let myTime = myDate.getTime();
-
-    // Get difference between date in UTC time zone and local time zone (in min)
-    // Convert min to ms
-    let myOffset = myDate.getTimezoneOffset() * 60000;
-
-    // Get unix timestamp
-    let myUT = myTime + myOffset;
-
-    // Get target city unix timestamp
-    // Convert target timezone seconds to ms and add to myUT
-    let targetCityUT = myUT + 1000 * zone;
-
-    // Get human readable time
-    let destinTime = new Date(targetCityUT).toLocaleString([], {
-      hour: 'numeric',
-      minute: 'numeric',
-    });
-
-    return destinTime;
   }
 
   city.forEach((header) => (header.textContent = obj.name));
   time.textContent = getHRTime(obj.dt, obj.timezone);
   timeZone.textContent = ` ${obj.extran.timeZone}`;
+  searchBox.value = '';
   temp.textContent = Math.round(obj.main.temp) + '°';
   descrImg.src = img;
   descrImg.alt = altText;
@@ -345,6 +347,7 @@ function displayWeather(obj) {
   sunset.textContent = getHRTime(sunsetEpoch, timezone);
   maxMin.textContent = `${maxTemp}° / ${minTemp}°`;
   windDir.style.transform = `rotate(${obj.wind.deg}deg)`;
+  windDir.title = `Wind ${obj.wind.deg}deg`;
   humidity.textContent = obj.main.humidity + '%';
   pressure.textContent = obj.main.pressure + ' hPa';
 
@@ -353,10 +356,7 @@ function displayWeather(obj) {
     : obj.sys.country;
 
   wind.textContent =
-    obj.units === 'imperial'
+    obj.extran.units === 'imperial'
       ? Math.round(obj.wind.speed) + ' mph'
       : Math.round((obj.wind.speed * 3600) / 1000) + ' km/h';
-
 }
-
-
