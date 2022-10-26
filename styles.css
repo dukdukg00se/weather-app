@@ -353,7 +353,7 @@ label[for='search-input'] {
 #wind-dir {
   height: 1.6rem;
   width: 1.2rem;
-  margin: 0 0 -0.1rem 0;
+  margin: 0 0.3rem -0.1rem 0;
 }
 
 @media (max-width: 475px), (max-height: 650px) {
