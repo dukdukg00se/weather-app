@@ -41,7 +41,7 @@ body {
 main {
   min-width: 27rem;
   max-width: 56rem;
-  background-color: var(--sunny);
+  background-color: #12438b;
   border-radius: 5px;
 }
 

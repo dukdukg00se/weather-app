@@ -1,393 +1,169 @@
-'use strict';
-
-const bCD = '../src/modules/bkgrnd/images/broken-clouds-d.svg';
-const bCN = '../src/modules/bkgrnd/images/broken-clouds-n.svg';
-const clearD = '../src/modules/bkgrnd/images/clear-d.svg';
-const clearN = '../src/modules/bkgrnd/images/clear-n.svg';
-const cloudyD = '../src/modules/bkgrnd/images/cloudy-d.svg';
-const cloudyN = '../src/modules/bkgrnd/images/cloudy-n.svg';
-const sand = '../src/modules/bkgrnd/images/sand.png';
-const rainyD = '../src/modules/bkgrnd/images/rainy-d.svg';
-const rainyN = '../src/modules/bkgrnd/images/rainy-n.svg';
-const snowyD = '../src/modules/bkgrnd/images/snowy-d.svg';
-const snowyN = '../src/modules/bkgrnd/images/snowy-n.svg';
-
-initPage();
-
-async function initPage() {
-  let data = await getWeatherData();
-
-  logParams(data);
-  setTheme(data);
-  displayWeather(data);
-  listenForUserInput(data);
-}
-
-function logParams(obj) {
-
-  if (obj) {
-
-  const main = document.querySelector('main');
-  const unitInput = document.getElementById('unit-input');
-
-  main.dataset.search = obj.extran.search;
-  unitInput.value = obj.extran.units;
-  }
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
 
 
-  // const main = document.querySelector('main');
-  // const unitInput = document.getElementById('unit-input');
 
-  // main.dataset.search = obj.extran.search;
-  // unitInput.value = obj.extran.units;
-}
 
-// Nested in initPage()
-function listenForUserInput() {
-  const searchBox = document.getElementById('search-input');
-  const searchIcon = document.getElementById('search');
-  const unitInput = document.getElementById('unit-input');
+// const main = document.querySelector('main');
+// main.innerHTML = `<section id="general">
+// <header id="gen-header">
+//   <div>
+//     <h1 class="city" id="gen-city"></h1>
+//     <span id="state-country"></span>
+//     As of <span id="data-time"></span><span id="data-zone"></span>
+//   </div>
 
-  async function getAreaWeather(e) {
-    if (e.key === 'Enter' || e.type === 'click') {
-      if (this.value === '') {
-        return;
-      }
+//   <div id="search-container">
+//     <div id="search-wrapper">
+//       <label for="search-input">Search</label>
+//       <input
+//         id="search-input"
+//         type="text"
+//         placeholder="Search City or Zip"
+//         autocomplete="off"
+//       />
+//       <img
+//         id="search"
+//         src="../src/assets/images/icons/magnify-glass.svg"
+//         alt="Magnifying glass icon"
+//         title="Search"
+//       />
+//     </div>
 
-      let conditions = await getWeatherData(this.value, unitInput.value);
+//     <div id="search-params">
+//       Oops an error occured. Please check search query. Query must be a:
 
-      logParams(conditions);
-      setTheme(conditions);
-      displayWeather(conditions);
-    }
-  }
-  async function updateUnits() {
-    const main = document.querySelector('main');
-    let userUnits = unitInput.value == 'imperial' ? 'metric' : 'imperial';
-    let conditions = await getWeatherData(main.dataset.search, userUnits);
+//       <ul>
+//         <li>5 digit zip code</li>
+//         <li>City name</li>
+//         <li>City name, country alpha-2 code</li>
+//         <li>City name, state abbrev, country alpha-2 code</li>
+//       </ul>
+//     </div>
+//   </div>
+// </header>
 
-    logParams(conditions);
-    setTheme(conditions);
-    displayWeather(conditions);
-  }
+// <div id="gen-body">
+//   <div>
+//     <div>Temperature<span id="temp"></span></div>
 
-  searchBox.addEventListener('keypress', getAreaWeather);
-  searchIcon.addEventListener('click', getAreaWeather.bind(searchBox));
-  unitInput.addEventListener('click', updateUnits);
-}
+//     <div id="units-wrapper">
+//       <span id="imperial" class="set">F</span>
+//       <label for="unit-input" class="switch">
+//         <input id="unit-input" type="checkbox" />
+//         <span class="slider"></span>
+//       </label>
+//       <span id="metric">C</span>
+//     </div>
+//   </div>
 
-// Nested in initPage(), listenForUserInput()
-function setTheme(obj) {
-  if (obj) {
-    let imgCode = obj ? obj.weather[0].icon : {};
-    let wallPaper;
-    let wallColor;
-  
-    switch (imgCode) {
-      case '01d':
-        wallPaper = clearD;
-        wallColor = 'var(--sunny)';
-        break;
-      case '02d':
-      case '03d':
-        wallPaper = cloudyD;
-        wallColor = 'var(--sunny)';
-        break;
-      case '04d':
-        wallPaper = bCD;
-        wallColor = 'var(--broken-clouds)';
-        break;
-      case '01n':
-        wallPaper = clearN;
-        wallColor = 'var(--night)';
-        break;
-      case '02n':
-      case '03n':
-        wallPaper = cloudyN;
-        wallColor = 'var(--night)';
-        break;
-      case '04n':
-        wallPaper = bCN;
-        wallColor = 'var(--night)';
-        break;
-      case '09d':
-      case '10d':
-      case '11d':
-        wallPaper = rainyD;
-        wallColor = 'var(--rainy-day)';
-        break;
-      case '09n':
-      case '10n':
-      case '11n':
-        wallPaper = rainyN;
-        wallColor = 'var(--rainy-night)';
-        break;
-      case '13d':
-        wallPaper = snowyD;
-        wallColor = 'var(--snowy-day)';
-        break;
-      case '13n':
-        wallPaper = snowyN;
-        wallColor = 'var(--snowy-night)';
-        break;
-      case '50d':
-      case '50n':
-        wallPaper = sand;
-        wallColor = 'var(--sand-mist)';
-  
-    }
-  
-    document.body.style.backgroundImage = `url(${wallPaper})`;
-    document.querySelector('main').style.backgroundColor = wallColor;
-  }
-}
+//   <div>
+//     <img id="descr-img" />
 
-// Nested in initPage(), listenForUserInput()
-async function getWeatherData(area = 90210, dispUnits = 'imperial') {
-  let isZip = /\d/g.test(area);
-  let query = isZip ? 'zip' : 'q';
+//     <div id="descr"></div>
+//   </div>
+// </div>
+// </section>
 
-  const filterData = ({
-    coord,
-    dt,
-    main,
-    name,
-    sys,
-    timezone,
-    weather,
-    wind,
-  }) => ({ coord, dt, main, name, sys, timezone, weather, wind });
+// <section id="detailed">
+// <header id="det-header">
+//   <h2>Weather today in <span class="city"></span></h2>
+// </header>
 
-  try {
-    // Instead of passing URL string, mode option to fetch request
-    // Use Request constructor to create new Request obj
-    // Pass Request obj to fetch w/ default options (e.g. mode: 'cors')
-    // Get weather info - doesn't include state, time zone abbr
-    let weatherRequest = new Request(
-      `https://api.openweathermap.org/data/2.5/weather?${query}=${area}&APPID=0aea211463138f620add488578423899&units=${dispUnits}`
-    );
+// <div>
+//   <div id="det-body-top">
+//     <div>Feels Like<span id="feels"></span></div>
 
-    const weatherResponse = await fetch(weatherRequest);
-    const weatherInfo = filterData(await weatherResponse.json());
+//     <div>
+//       <div>
+//         <div>
+//           <img
+//             class="sun-icon"
+//             src="../src/assets/images/icons/sunrise-fill.svg"
+//             alt="Sunrise icon"
+//             title="Sunrise"
+//           />
+//           Sunrise:
+//         </div>
+//         <span id="sunrise"></span>
+//       </div>
 
-    // Get state name using second api call, limit responses to 1
-    // Need to call openweather reverse geocoding api for state name
-    // Current weather api only contains city name, country
-    let nameRequest = new Request(
-      `https://api.openweathermap.org/geo/1.0/reverse?lat=${weatherInfo.coord.lat}&lon=${weatherInfo.coord.lon}&limit=1&appid=0aea211463138f620add488578423899`
-    );
+//       <div>
+//         <div>
+//           <img
+//             class="sun-icon"
+//             src="../src/assets/images/icons/sunset-fill.svg"
+//             alt="Sunset Icon"
+//             title="Sunset"
+//           />
+//           Sunset:
+//         </div>
+//         <span id="sunset"></span>
+//       </div>
+//     </div>
+//   </div>
 
-    // Use TimeZoneDB RESTful API to get timezone abbreviation
-    // Open Weather OneCall API requires CC info
-    let tmZoneRequest = new Request(
-      `https://api.timezonedb.com/v2.1/get-time-zone?key=P0O68OWY0HTK&format=json&by=position&lat=${weatherInfo.coord.lat}&lng=${weatherInfo.coord.lon}`
-    );
+//   <div id="det-body-bottom">
+//     <ul>
+//       <li>
+//         <img
+//           class="weather-icon"
+//           src="../src/assets/images/icons/thermo.svg"
+//           alt="Thermometer icon"
+//           title="Max/min temperature"
+//         />
+//         <div class="li-descr">Max / Min</div>
+//         <div id="max-min"></div>
+//       </li>
 
-    weatherInfo.extran = await Promise.all([
-      fetch(nameRequest),
-      fetch(tmZoneRequest),
-    ])
-      .then((responses) => {
-        return Promise.all(responses.map((response) => response.json()));
-      })
-      .then((responses) => {
-        // return {
-        //   state: responses[0][0].state,
-        //   timeZone: responses[1].abbreviation,
-        // };
+//       <li>
+//         <img
+//           class="weather-icon"
+//           src="../src/assets/images/icons/wind.svg"
+//           alt="Wind icon"
+//           title="Wind speed and direction"
+//         />
+//         <div class="li-descr">Wind</div>
+//         <div>
+//           <img
+//             id="wind-dir"
+//             src="../src/assets/images/icons/wind-dir.svg"
+//             alt="Arrow showing wind direction"
+//           />
+//           <span id="wind"></span>
+//         </div>
+//       </li>
 
-        let state = responses[0][0].state;
-        let timeZone = responses[1].abbreviation;
+//       <li>
+//         <img
+//           class="weather-icon"
+//           src="../src/assets/images/icons/humidity.svg"
+//           alt="Humidity icon"
+//           title="Humidity"
+//         />
+//         <div class="li-descr">Humidity</div>
+//         <div id="humidity"></div>
+//       </li>
 
-        // Same as above
-        return { state, timeZone };
-      });
-    weatherInfo.extran.search = area;
-    weatherInfo.extran.units = dispUnits;
+//       <li>
+//         <img
+//           class="weather-icon"
+//           src="../src/assets/images/icons/pressure.svg"
+//           alt="Pressure icon"
+//           title="Pressure"
+//         />
+//         <div class="li-descr">Pressure</div>
+//         <div id="pressure"></div>
+//       </li>
+//     </ul>
+//   </div>
+// </div>
+// </section>`;
 
-    return weatherInfo;
-  } catch {
-    return false;
-  }
-}
 
-// Nested in initPage(), listenForUserInput()
-function displayWeather(obj) {
-  const city = document.querySelectorAll('.city');
-  const stateCountry = document.getElementById('state-country');
-  const time = document.getElementById('data-time');
-  const timeZone = document.getElementById('data-zone');
-  const searchBox = document.getElementById('search-input');
-  const errorMsg = document.getElementById('search-params');
-  const temp = document.querySelector('#temp');
-  const imperial = document.getElementById('imperial');
-  const metric = document.getElementById('metric');
-  const descrImg = document.getElementById('descr-img');
-  const descrText = document.getElementById('descr');
-  const feels = document.getElementById('feels');
-  const sunrise = document.getElementById('sunrise');
-  const sunset = document.getElementById('sunset');
-  const maxMin = document.getElementById('max-min');
-  const windDir = document.getElementById('wind-dir');
-  const wind = document.getElementById('wind');
-  const humidity = document.getElementById('humidity');
-  const pressure = document.getElementById('pressure');
-
-  const showErr = () => {
-    errorMsg.style.display = 'block';
-
-    const removeErr = (e) => {
-      if (e.key === 'Escape' || e.type === 'click') {
-        errorMsg.style.display = 'none';
-        document.body.removeEventListener('keydown', removeErr);
-        document.body.removeEventListener('click', removeErr);
-      }
-    }
-
-    document.body.addEventListener('keydown', removeErr);
-    document.body.addEventListener('click', removeErr);
-  }
-
-  if (!obj) {
-    showErr();
-  } else {
-    const regexFL = /(\b[a-z](?!\s))/g; // First letter of each word
-    const timezone = obj.timezone;
-    const sunriseEpoch = obj.sys.sunrise;
-    const sunsetEpoch = obj.sys.sunset;
-    const current = obj.weather[0].description;
-    const maxTemp = Math.round(obj.main.temp_max);
-    const minTemp = Math.round(obj.main.temp_min);
-  
-    // Convert unix time to human readable time
-    const getHRTime = (time, zone) => {
-      // Get date of unix timestamp
-      // Convert time (s) to ms
-      // Need to convert to ms for Date() constructor
-      // Output ex: Tue Oct 18 2022 14:34:05 GMT-0700 (Pacific Daylight Time)
-      let myDate = new Date(time * 1000);
-  
-      // Get time since Unix epoch 1/1/70, 00:00:00.000 GMT (in ms)
-      let myTime = myDate.getTime();
-  
-      // Get difference between date in UTC time zone and local time zone (in min)
-      // Convert min to ms
-      let myOffset = myDate.getTimezoneOffset() * 60000;
-  
-      // Get unix timestamp
-      let myUT = myTime + myOffset;
-  
-      // Get target city unix timestamp
-      // Convert target timezone seconds to ms and add to myUT
-      let targetCityUT = myUT + 1000 * zone;
-  
-      // Get human readable time
-      let destinTime = new Date(targetCityUT).toLocaleString([], {
-        hour: 'numeric',
-        minute: 'numeric',
-      });
-  
-      return destinTime;
-    };
-  
-    // Find icon for current weather, initialize alt and title text
-    let descrImgCode = obj.weather[0].icon;
-    let img;
-    let altText;
-    let titleText;
-    switch (descrImgCode) {
-      case '01d':
-        img = '../src/modules/detailed/images/sun.svg';
-        altText = 'Sun';
-        titleText = 'Clear sky';
-        break;
-      case '01n':
-        img = '../src/modules/detailed/images/moon.svg';
-        altText = 'Moon';
-        titleText = 'Clear sky';
-        break;
-      case '02d':
-        img = '../src/modules/detailed/images/cloudy-day.svg';
-        altText = 'Sun with clouds';
-        titleText = 'Cloudy day';
-        break;
-      case '02n':
-        img = '../src/modules/detailed/images/cloudy-night.svg';
-        altText = 'Moon with clouds';
-        titleText = 'Clear night';
-        break;
-      case '03d':
-      case '03n':
-      case '04d':
-      case '04n':
-        img = '../src/modules/detailed/images/cloudy.svg';
-        altText = 'Clouds';
-        titleText = 'Cloudy skies';
-        break;
-      case '09d':
-      case '09n':
-      case '10d':
-      case '10n':
-        img = '../src/modules/detailed/images/rainy.svg';
-        altText = 'Cloud and rain';
-        titleText = 'Rain';
-        break;
-      case '11d':
-      case '11n':
-        img = '../src/modules/detailed/images/lightning.svg';
-        altText = 'Cloud and lightning';
-        titleText = 'Thunderstorm';
-        break;
-      case '13d':
-      case '13n':
-        img = '../src/modules/detailed/images/snow.svg';
-        altText = 'Cloud and snow';
-        titleText = 'Snow';
-        break;
-      case '50d':
-      case '50n':
-        img = '../src/modules/detailed/images/mist.svg';
-        altText = 'Mist';
-        titleText = 'Haze';
-    }
-  
-    // Highlight display units
-    switch (obj.extran.units) {
-      case 'imperial':
-        imperial.classList.add('set');
-        metric.classList.remove('set');
-        break;
-      case 'metric':
-        imperial.classList.remove('set');
-        metric.classList.add('set');
-    }
-  
-    city.forEach((header) => (header.textContent = obj.name));
-    time.textContent = getHRTime(obj.dt, obj.timezone);
-    timeZone.textContent = ` ${obj.extran.timeZone}`;
-    searchBox.value = '';
-    errorMsg.style.display = 'none';
-    temp.textContent = Math.round(obj.main.temp) + '°';
-    descrImg.src = img;
-    descrImg.alt = altText;
-    descrImg.title = titleText;
-    descrText.textContent = current.replace(regexFL, (fl) => fl.toUpperCase());
-    feels.textContent = Math.round(obj.main.feels_like) + '°';
-    sunrise.textContent = getHRTime(sunriseEpoch, timezone);
-    sunset.textContent = getHRTime(sunsetEpoch, timezone);
-    maxMin.textContent = `${maxTemp}° / ${minTemp}°`;
-    windDir.style.transform = `rotate(${obj.wind.deg}deg)`;
-    windDir.title = `Wind ${obj.wind.deg}deg`;
-    humidity.textContent = obj.main.humidity + '%';
-    pressure.textContent = obj.main.pressure + ' hPa';
-  
-    stateCountry.textContent = obj.extran.state
-      ? `${obj.extran.state}, ${obj.sys.country}`
-      : obj.sys.country;
-  
-    wind.textContent =
-      obj.extran.units === 'imperial'
-        ? Math.round(obj.wind.speed) + ' mph'
-        : Math.round((obj.wind.speed * 3600) / 1000) + ' km/h';
-  }
-}
+/******/ })()
+;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFpbi5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7QUFJQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vd2VhdGhlci1hcHAvLi9zcmMvaW5kZXguanMiXSwic291cmNlc0NvbnRlbnQiOlsiXG5cblxuXG4vLyBjb25zdCBtYWluID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcignbWFpbicpO1xuLy8gbWFpbi5pbm5lckhUTUwgPSBgPHNlY3Rpb24gaWQ9XCJnZW5lcmFsXCI+XG4vLyA8aGVhZGVyIGlkPVwiZ2VuLWhlYWRlclwiPlxuLy8gICA8ZGl2PlxuLy8gICAgIDxoMSBjbGFzcz1cImNpdHlcIiBpZD1cImdlbi1jaXR5XCI+PC9oMT5cbi8vICAgICA8c3BhbiBpZD1cInN0YXRlLWNvdW50cnlcIj48L3NwYW4+XG4vLyAgICAgQXMgb2YgPHNwYW4gaWQ9XCJkYXRhLXRpbWVcIj48L3NwYW4+PHNwYW4gaWQ9XCJkYXRhLXpvbmVcIj48L3NwYW4+XG4vLyAgIDwvZGl2PlxuXG4vLyAgIDxkaXYgaWQ9XCJzZWFyY2gtY29udGFpbmVyXCI+XG4vLyAgICAgPGRpdiBpZD1cInNlYXJjaC13cmFwcGVyXCI+XG4vLyAgICAgICA8bGFiZWwgZm9yPVwic2VhcmNoLWlucHV0XCI+U2VhcmNoPC9sYWJlbD5cbi8vICAgICAgIDxpbnB1dFxuLy8gICAgICAgICBpZD1cInNlYXJjaC1pbnB1dFwiXG4vLyAgICAgICAgIHR5cGU9XCJ0ZXh0XCJcbi8vICAgICAgICAgcGxhY2Vob2xkZXI9XCJTZWFyY2ggQ2l0eSBvciBaaXBcIlxuLy8gICAgICAgICBhdXRvY29tcGxldGU9XCJvZmZcIlxuLy8gICAgICAgLz5cbi8vICAgICAgIDxpbWdcbi8vICAgICAgICAgaWQ9XCJzZWFyY2hcIlxuLy8gICAgICAgICBzcmM9XCIuLi9zcmMvYXNzZXRzL2ltYWdlcy9pY29ucy9tYWduaWZ5LWdsYXNzLnN2Z1wiXG4vLyAgICAgICAgIGFsdD1cIk1hZ25pZnlpbmcgZ2xhc3MgaWNvblwiXG4vLyAgICAgICAgIHRpdGxlPVwiU2VhcmNoXCJcbi8vICAgICAgIC8+XG4vLyAgICAgPC9kaXY+XG5cbi8vICAgICA8ZGl2IGlkPVwic2VhcmNoLXBhcmFtc1wiPlxuLy8gICAgICAgT29wcyBhbiBlcnJvciBvY2N1cmVkLiBQbGVhc2UgY2hlY2sgc2VhcmNoIHF1ZXJ5LiBRdWVyeSBtdXN0IGJlIGE6XG5cbi8vICAgICAgIDx1bD5cbi8vICAgICAgICAgPGxpPjUgZGlnaXQgemlwIGNvZGU8L2xpPlxuLy8gICAgICAgICA8bGk+Q2l0eSBuYW1lPC9saT5cbi8vICAgICAgICAgPGxpPkNpdHkgbmFtZSwgY291bnRyeSBhbHBoYS0yIGNvZGU8L2xpPlxuLy8gICAgICAgICA8bGk+Q2l0eSBuYW1lLCBzdGF0ZSBhYmJyZXYsIGNvdW50cnkgYWxwaGEtMiBjb2RlPC9saT5cbi8vICAgICAgIDwvdWw+XG4vLyAgICAgPC9kaXY+XG4vLyAgIDwvZGl2PlxuLy8gPC9oZWFkZXI+XG5cbi8vIDxkaXYgaWQ9XCJnZW4tYm9keVwiPlxuLy8gICA8ZGl2PlxuLy8gICAgIDxkaXY+VGVtcGVyYXR1cmU8c3BhbiBpZD1cInRlbXBcIj48L3NwYW4+PC9kaXY+XG5cbi8vICAgICA8ZGl2IGlkPVwidW5pdHMtd3JhcHBlclwiPlxuLy8gICAgICAgPHNwYW4gaWQ9XCJpbXBlcmlhbFwiIGNsYXNzPVwic2V0XCI+Rjwvc3Bhbj5cbi8vICAgICAgIDxsYWJlbCBmb3I9XCJ1bml0LWlucHV0XCIgY2xhc3M9XCJzd2l0Y2hcIj5cbi8vICAgICAgICAgPGlucHV0IGlkPVwidW5pdC1pbnB1dFwiIHR5cGU9XCJjaGVja2JveFwiIC8+XG4vLyAgICAgICAgIDxzcGFuIGNsYXNzPVwic2xpZGVyXCI+PC9zcGFuPlxuLy8gICAgICAgPC9sYWJlbD5cbi8vICAgICAgIDxzcGFuIGlkPVwibWV0cmljXCI+Qzwvc3Bhbj5cbi8vICAgICA8L2Rpdj5cbi8vICAgPC9kaXY+XG5cbi8vICAgPGRpdj5cbi8vICAgICA8aW1nIGlkPVwiZGVzY3ItaW1nXCIgLz5cblxuLy8gICAgIDxkaXYgaWQ9XCJkZXNjclwiPjwvZGl2PlxuLy8gICA8L2Rpdj5cbi8vIDwvZGl2PlxuLy8gPC9zZWN0aW9uPlxuXG4vLyA8c2VjdGlvbiBpZD1cImRldGFpbGVkXCI+XG4vLyA8aGVhZGVyIGlkPVwiZGV0LWhlYWRlclwiPlxuLy8gICA8aDI+V2VhdGhlciB0b2RheSBpbiA8c3BhbiBjbGFzcz1cImNpdHlcIj48L3NwYW4+PC9oMj5cbi8vIDwvaGVhZGVyPlxuXG4vLyA8ZGl2PlxuLy8gICA8ZGl2IGlkPVwiZGV0LWJvZHktdG9wXCI+XG4vLyAgICAgPGRpdj5GZWVscyBMaWtlPHNwYW4gaWQ9XCJmZWVsc1wiPjwvc3Bhbj48L2Rpdj5cblxuLy8gICAgIDxkaXY+XG4vLyAgICAgICA8ZGl2PlxuLy8gICAgICAgICA8ZGl2PlxuLy8gICAgICAgICAgIDxpbWdcbi8vICAgICAgICAgICAgIGNsYXNzPVwic3VuLWljb25cIlxuLy8gICAgICAgICAgICAgc3JjPVwiLi4vc3JjL2Fzc2V0cy9pbWFnZXMvaWNvbnMvc3VucmlzZS1maWxsLnN2Z1wiXG4vLyAgICAgICAgICAgICBhbHQ9XCJTdW5yaXNlIGljb25cIlxuLy8gICAgICAgICAgICAgdGl0bGU9XCJTdW5yaXNlXCJcbi8vICAgICAgICAgICAvPlxuLy8gICAgICAgICAgIFN1bnJpc2U6XG4vLyAgICAgICAgIDwvZGl2PlxuLy8gICAgICAgICA8c3BhbiBpZD1cInN1bnJpc2VcIj48L3NwYW4+XG4vLyAgICAgICA8L2Rpdj5cblxuLy8gICAgICAgPGRpdj5cbi8vICAgICAgICAgPGRpdj5cbi8vICAgICAgICAgICA8aW1nXG4vLyAgICAgICAgICAgICBjbGFzcz1cInN1bi1pY29uXCJcbi8vICAgICAgICAgICAgIHNyYz1cIi4uL3NyYy9hc3NldHMvaW1hZ2VzL2ljb25zL3N1bnNldC1maWxsLnN2Z1wiXG4vLyAgICAgICAgICAgICBhbHQ9XCJTdW5zZXQgSWNvblwiXG4vLyAgICAgICAgICAgICB0aXRsZT1cIlN1bnNldFwiXG4vLyAgICAgICAgICAgLz5cbi8vICAgICAgICAgICBTdW5zZXQ6XG4vLyAgICAgICAgIDwvZGl2PlxuLy8gICAgICAgICA8c3BhbiBpZD1cInN1bnNldFwiPjwvc3Bhbj5cbi8vICAgICAgIDwvZGl2PlxuLy8gICAgIDwvZGl2PlxuLy8gICA8L2Rpdj5cblxuLy8gICA8ZGl2IGlkPVwiZGV0LWJvZHktYm90dG9tXCI+XG4vLyAgICAgPHVsPlxuLy8gICAgICAgPGxpPlxuLy8gICAgICAgICA8aW1nXG4vLyAgICAgICAgICAgY2xhc3M9XCJ3ZWF0aGVyLWljb25cIlxuLy8gICAgICAgICAgIHNyYz1cIi4uL3NyYy9hc3NldHMvaW1hZ2VzL2ljb25zL3RoZXJtby5zdmdcIlxuLy8gICAgICAgICAgIGFsdD1cIlRoZXJtb21ldGVyIGljb25cIlxuLy8gICAgICAgICAgIHRpdGxlPVwiTWF4L21pbiB0ZW1wZXJhdHVyZVwiXG4vLyAgICAgICAgIC8+XG4vLyAgICAgICAgIDxkaXYgY2xhc3M9XCJsaS1kZXNjclwiPk1heCAvIE1pbjwvZGl2PlxuLy8gICAgICAgICA8ZGl2IGlkPVwibWF4LW1pblwiPjwvZGl2PlxuLy8gICAgICAgPC9saT5cblxuLy8gICAgICAgPGxpPlxuLy8gICAgICAgICA8aW1nXG4vLyAgICAgICAgICAgY2xhc3M9XCJ3ZWF0aGVyLWljb25cIlxuLy8gICAgICAgICAgIHNyYz1cIi4uL3NyYy9hc3NldHMvaW1hZ2VzL2ljb25zL3dpbmQuc3ZnXCJcbi8vICAgICAgICAgICBhbHQ9XCJXaW5kIGljb25cIlxuLy8gICAgICAgICAgIHRpdGxlPVwiV2luZCBzcGVlZCBhbmQgZGlyZWN0aW9uXCJcbi8vICAgICAgICAgLz5cbi8vICAgICAgICAgPGRpdiBjbGFzcz1cImxpLWRlc2NyXCI+V2luZDwvZGl2PlxuLy8gICAgICAgICA8ZGl2PlxuLy8gICAgICAgICAgIDxpbWdcbi8vICAgICAgICAgICAgIGlkPVwid2luZC1kaXJcIlxuLy8gICAgICAgICAgICAgc3JjPVwiLi4vc3JjL2Fzc2V0cy9pbWFnZXMvaWNvbnMvd2luZC1kaXIuc3ZnXCJcbi8vICAgICAgICAgICAgIGFsdD1cIkFycm93IHNob3dpbmcgd2luZCBkaXJlY3Rpb25cIlxuLy8gICAgICAgICAgIC8+XG4vLyAgICAgICAgICAgPHNwYW4gaWQ9XCJ3aW5kXCI+PC9zcGFuPlxuLy8gICAgICAgICA8L2Rpdj5cbi8vICAgICAgIDwvbGk+XG5cbi8vICAgICAgIDxsaT5cbi8vICAgICAgICAgPGltZ1xuLy8gICAgICAgICAgIGNsYXNzPVwid2VhdGhlci1pY29uXCJcbi8vICAgICAgICAgICBzcmM9XCIuLi9zcmMvYXNzZXRzL2ltYWdlcy9pY29ucy9odW1pZGl0eS5zdmdcIlxuLy8gICAgICAgICAgIGFsdD1cIkh1bWlkaXR5IGljb25cIlxuLy8gICAgICAgICAgIHRpdGxlPVwiSHVtaWRpdHlcIlxuLy8gICAgICAgICAvPlxuLy8gICAgICAgICA8ZGl2IGNsYXNzPVwibGktZGVzY3JcIj5IdW1pZGl0eTwvZGl2PlxuLy8gICAgICAgICA8ZGl2IGlkPVwiaHVtaWRpdHlcIj48L2Rpdj5cbi8vICAgICAgIDwvbGk+XG5cbi8vICAgICAgIDxsaT5cbi8vICAgICAgICAgPGltZ1xuLy8gICAgICAgICAgIGNsYXNzPVwid2VhdGhlci1pY29uXCJcbi8vICAgICAgICAgICBzcmM9XCIuLi9zcmMvYXNzZXRzL2ltYWdlcy9pY29ucy9wcmVzc3VyZS5zdmdcIlxuLy8gICAgICAgICAgIGFsdD1cIlByZXNzdXJlIGljb25cIlxuLy8gICAgICAgICAgIHRpdGxlPVwiUHJlc3N1cmVcIlxuLy8gICAgICAgICAvPlxuLy8gICAgICAgICA8ZGl2IGNsYXNzPVwibGktZGVzY3JcIj5QcmVzc3VyZTwvZGl2PlxuLy8gICAgICAgICA8ZGl2IGlkPVwicHJlc3N1cmVcIj48L2Rpdj5cbi8vICAgICAgIDwvbGk+XG4vLyAgICAgPC91bD5cbi8vICAgPC9kaXY+XG4vLyA8L2Rpdj5cbi8vIDwvc2VjdGlvbj5gO1xuXG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=
