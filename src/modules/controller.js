@@ -1,13 +1,10 @@
 import * as display from './display';
 import * as data from './data';
 
-async function initPage() {
-  let conditions = await getWeather();
-
-  logParams(conditions);
-  setTheme(conditions);
-  displayWeather(conditions);
-  listenForUserInput(conditions);
+function setWeather(obj) {
+  data.logParams(obj);
+  display.setTheme(obj);
+  display.displayWeather(obj);
 }
 
 function listenForUserInput() {
@@ -21,24 +18,29 @@ function listenForUserInput() {
         return;
       }
 
-      let conditions = await getWeather(this.value, unitInput.value);
+      let conditions = await data.getWeather(this.value, unitInput.value);
 
-      logParams(conditions);
-      setTheme(conditions);
-      displayWeather(conditions);
+      setWeather(conditions);
     }
   }
   async function updateUnits() {
     const main = document.querySelector('main');
     let userUnits = unitInput.value == 'imperial' ? 'metric' : 'imperial';
-    let conditions = await getWeather(main.dataset.search, userUnits);
+    let conditions = await data.getWeather(main.dataset.search, userUnits);
 
-    logParams(conditions);
-    setTheme(conditions);
-    displayWeather(conditions);
+    setWeather(conditions);
   }
 
   searchBox.addEventListener('keypress', getAreaWeather);
   searchIcon.addEventListener('click', getAreaWeather.bind(searchBox));
   unitInput.addEventListener('click', updateUnits);
 }
+
+async function initWeatherPage() {
+  let conditions = await data.getWeather();
+
+  setWeather(conditions);
+  listenForUserInput(conditions);
+}
+
+export default initWeatherPage;
