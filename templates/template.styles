@@ -1,0 +1,369 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+html {
+  font-size: 62.5%;
+  --light-text: white;
+  --dark-bkgrnd: black;
+  --broken-clouds: #87c4eb;
+  --sunny: #0c8dc0;
+  --night: #143d86;
+  --rainy-day: #9ab4d1;
+  --rainy-night: #415f7f;
+  --snowy-day: #8bbee6;
+  --snowy-night: #2f1463;
+  --sand-mist: #68382d;
+}
+
+body {
+  /* background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-blend-mode: multiply; */
+  background: no-repeat center/cover;
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--light-text);
+  font-family: sans-serif;
+  contain: content;
+  min-width: 275px;
+  min-height: 100vh;
+}
+
+main {
+  min-width: 27rem;
+  max-width: 56rem;
+  background-color: #12438b;
+  border-radius: 5px;
+}
+
+main section {
+  background-color: rgba(0, 0, 0, 0.65);
+  margin: 1rem;
+}
+
+#gen-header {
+  padding: 2rem;
+  background-color: var(--dark-bkgrnd);
+  border-radius: 5px 5px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2%;
+}
+
+#gen-header > div {
+  width: 49%;
+}
+
+#gen-header > div:last-of-type {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#search-container {
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+}
+
+#search-params {
+  display: none;
+  position: absolute;
+  top: 43px;
+  background-color: black;
+  border: solid 2px white;
+  padding: 11px;
+  font-size: 13px;
+  border-radius: 5px;
+}
+
+/* Top arrow  */
+#search-params::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
+
+#search-params > ul {
+  list-style: disc;
+  margin: 8px 0 0 11px;
+}
+
+#search-params > ul > li {
+  margin-top: 3px;
+}
+
+#search-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  width: 100%;
+  max-width: 40rem;
+  min-width: 12rem;
+}
+
+#search-wrapper > img {
+  height: 2.2rem;
+  width: auto;
+  position: absolute;
+  right: 1rem;
+}
+
+#search-wrapper > img:hover {
+  cursor: pointer;
+}
+
+#units-wrapper {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin: 1.2rem 0 0;
+  font-size: 1.6rem;
+}
+
+.set {
+  font-size: 2.3rem;
+  font-weight: 600;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 3rem;
+  height: 1.6rem;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--light-text);
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 4px;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 1.2rem;
+  width: 1.1rem;
+  left: 0.4rem;
+  bottom: 0.2rem;
+  background-color: var(--dark-bkgrnd);
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 2px;
+}
+
+input:checked + .slider {
+  background-color: #b5b5b5;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 0.1rem #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(11px);
+  -ms-transform: translateX(11px);
+  transform: translateX(11px);
+}
+
+h1 {
+  font-size: 2.6rem;
+  margin-bottom: 0.5rem;
+}
+
+h1 + span {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.locatn {
+  font-weight: 600;
+}
+
+/* Position label off screen but still visible for screen readers */
+/* https://stackoverflow.com/questions/40029976/how-to-hide-label-for-css */
+label[for='search-input'] {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+#search-input {
+  padding: 0.5rem 3.9rem 0.5rem 1rem;
+  border-radius: 20px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  font-size: 2rem;
+  color: var(--light-text);
+  width: 100%;
+}
+
+#search-input::placeholder {
+  color: rgb(214, 214, 214);
+  opacity: 1;
+  font-size: 1.8rem;
+}
+
+#gen-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem;
+  gap: 1.2rem;
+  font-size: 2.2rem;
+}
+
+#gen-body h2 {
+  font-size: 7.2rem;
+}
+
+#gen-body > div:first-of-type {
+  width: 65%;
+}
+
+#gen-body > div:last-of-type {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 45%;
+  align-self: center;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+#temp {
+  display: block;
+  font-size: 7.2rem;
+  margin-top: 0.2rem;
+}
+
+#descr-img {
+  height: auto;
+  width: 100%;
+  max-width: 10rem;
+}
+
+#det-header {
+  padding: 2rem;
+  border-radius: 5px 5px 0 0;
+}
+
+#det-header h2 {
+  font-size: 2.4rem;
+}
+
+#detailed > div {
+  font-size: 1.8rem;
+}
+
+#det-body-top {
+  padding: 0 2rem 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+#feels {
+  display: block;
+  font-size: 7.2rem;
+}
+
+#det-body-top > div:last-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-right: 1rem;
+}
+
+#det-body-top > div:last-child > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.sun-icon {
+  height: 3.2rem;
+  width: auto;
+  margin-bottom: -0.6rem;
+}
+
+#det-body-bottom {
+  padding: 0 2rem 2rem;
+}
+
+#det-body-bottom li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-top: solid;
+}
+
+#det-body-bottom li:last-of-type {
+  padding-bottom: 0;
+}
+
+.weather-icon {
+  height: auto;
+  width: 2.5rem;
+}
+
+.li-descr {
+  flex-grow: 1;
+  min-width: 55%;
+}
+
+#wind-dir {
+  height: 1.6rem;
+  width: 1.2rem;
+  margin: 0 0.3rem -0.1rem 0;
+}
+
+@media (max-width: 475px), (max-height: 650px) {
+  html {
+    font-size: 50%;
+  }
+}
+
+@media (max-width: 375px), (max-height: 550px) {
+  html {
+    font-size: 40%;
+  }
+}
