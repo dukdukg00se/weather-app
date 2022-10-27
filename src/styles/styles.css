@@ -39,9 +39,9 @@ body {
 }
 
 main {
+  display: none;
   min-width: 27rem;
   max-width: 56rem;
-  background-color: var(--sunny);
   border-radius: 5px;
 }
 
@@ -89,7 +89,7 @@ main section {
 
 /* Top arrow  */
 #search-params::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 100%;
   left: 50%;
