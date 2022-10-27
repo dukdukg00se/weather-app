@@ -1,14 +1,14 @@
-import bCD from '../src/assets/images/wallpapers/broken-clouds-d.svg';
-import bCN from '../src/assets/images/wallpapers/broken-clouds-n.svg';
-import clearD from '../src/assets/images/wallpapers/clear-d.svg';
-import clearN from '../src/assets/images/wallpapers/clear-n.svg';
-import cloudyD from '../src/assets/images/wallpapers/cloudy-d.svg';
-import cloudyN from '../src/assets/images/wallpapers/cloudy-n.svg';
-import sand from '../src/assets/images/wallpapers/sand.png';
-import rainyD from '../src/assets/images/wallpapers/rainy-d.svg';
-import rainyN from '../src/assets/images/wallpapers/rainy-n.svg';
-import snowyD from '../src/assets/images/wallpapers/snowy-d.svg';
-import snowyN from '../src/assets/images/wallpapers/snowy-n.svg';
+import bCD from '../assets/images/wallpapers/broken-clouds-d.svg';
+import bCN from '../assets/images/wallpapers/broken-clouds-n.svg';
+import clearD from '../assets/images/wallpapers/clear-d.svg';
+import clearN from '../assets/images/wallpapers/clear-n.svg';
+import cloudyD from '../assets/images/wallpapers/cloudy-d.svg';
+import cloudyN from '../assets/images/wallpapers/cloudy-n.svg';
+import sand from '../assets/images/wallpapers/sand.png';
+import rainyD from '../assets/images/wallpapers/rainy-d.svg';
+import rainyN from '../assets/images/wallpapers/rainy-n.svg';
+import snowyD from '../assets/images/wallpapers/snowy-d.svg';
+import snowyN from '../assets/images/wallpapers/snowy-n.svg';
 
 // Set wallpaper, background color that matches current weather
 function setTheme(obj) {
@@ -77,6 +77,7 @@ function setTheme(obj) {
 
 // Pop weather info or display err msg
 function displayWeather(obj) {
+  const main = document.querySelector('main');
   const city = document.querySelectorAll('.city');
   const stateCountry = document.getElementById('state-country');
   const time = document.getElementById('data-time');
@@ -226,6 +227,7 @@ function displayWeather(obj) {
         metric.classList.add('set');
     }
 
+    main.style.display = 'block';
     city.forEach((header) => (header.textContent = obj.name));
     time.textContent = getHRTime(obj.dt, obj.timezone);
     timeZone.textContent = ` ${obj.extran.timeZone}`;
@@ -257,41 +259,3 @@ function displayWeather(obj) {
 }
 
 export { setTheme, displayWeather };
-
-// const createWeatherApp = () => {
-//   const main = document.createElement('main');
-
-//   const general = document.createElement('section');
-
-//   // Location, time
-//   const genHeader = document.createElement('header');
-//   const timeLocatnContnr = document.createElement('div');
-//   const topHeading = document.createElement('h1');
-//   const locatnValue = document.createElement('span');
-//   const timeValue = document.createElement('span');
-//   const zoneValue = document.createElement('span');
-
-//   const
-
-//   //
-//   const genBody = document.createElement('div');
-//   const tempUnitsContnr = document.createElement('div');
-//   const tempWrapper = document.createElement('span');
-//   const tempValue = document.createElement('span');
-//   const unitsWrapper = document.createElement('div');
-//   const imperial = document.createElement('span');
-//   const unitLabel = document.createElement('label');
-//   const unitInput = document.createElement('input');
-//   const unitSlider = document.createElement('span');
-//   const metric = document.createElement('span');
-
-//   const detailed = document.createElement('section');
-//   const detHeader = document.createElement('header');
-//   const detHeading = document.createElement('h2');
-
-//   const detBodyWrapper = document.createElement('div');
-//   const detBodyTop = document.createElement('div');
-//   const feelsWrapper = document.createElement('div');
-//   const feelsValue = document.createElement('span');
-
-// };
