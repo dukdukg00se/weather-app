@@ -1,4 +1,5 @@
-// Set search units, search term to html
+// Records search units, search term to html
+// Serves to "save" search params
 function logParams(obj) {
   if (obj) {
     const main = document.querySelector('main');
@@ -9,7 +10,9 @@ function logParams(obj) {
   }
 }
 
-// Returns weather obj with only required info
+
+// Returns obj with weather info for given area
+// If error - returns false
 async function getWeather(area = 90210, dispUnits = 'imperial') {
   let isZip = /\d/g.test(area);
   let query = isZip ? 'zip' : 'q';
