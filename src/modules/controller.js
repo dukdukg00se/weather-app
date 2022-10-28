@@ -18,15 +18,15 @@ function listenForUserInput() {
         return;
       }
 
-      let conditions = await data.getWeather(this.value, unitInput.value);
+      const conditions = await data.getWeather(this.value, unitInput.value);
 
       setWeather(conditions);
     }
   }
   async function updateUnits() {
     const main = document.querySelector('main');
-    let userUnits = unitInput.value == 'imperial' ? 'metric' : 'imperial';
-    let conditions = await data.getWeather(main.dataset.search, userUnits);
+    const userUnits = unitInput.value == 'imperial' ? 'metric' : 'imperial';
+    const conditions = await data.getWeather(main.dataset.search, userUnits);
 
     setWeather(conditions);
   }
@@ -37,7 +37,7 @@ function listenForUserInput() {
 }
 
 async function initWeatherPage() {
-  let conditions = await data.getWeather();
+  const conditions = await data.getWeather();
 
   setWeather(conditions);
   listenForUserInput(conditions);

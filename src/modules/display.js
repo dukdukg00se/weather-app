@@ -1,3 +1,5 @@
+/* eslint-disable default-case, no-return-assign, no-param-reassign */
+
 import bCD from '../assets/images/wallpapers/broken-clouds-d.svg';
 import bCN from '../assets/images/wallpapers/broken-clouds-n.svg';
 import clearD from '../assets/images/wallpapers/clear-d.svg';
@@ -13,7 +15,7 @@ import snowyN from '../assets/images/wallpapers/snowy-n.svg';
 // Set wallpaper, background color that matches current weather
 function setTheme(obj) {
   if (obj) {
-    let imgCode = obj ? obj.weather[0].icon : {};
+    const imgCode = obj ? obj.weather[0].icon : {};
     let wallPaper;
     let wallColor;
 
@@ -117,7 +119,7 @@ function displayWeather(obj) {
     showErr();
   } else {
     const regexFL = /(\b[a-z](?!\s))/g; // First letter of each word
-    const timezone = obj.timezone;
+    const { timezone } = obj;
     const sunriseEpoch = obj.sys.sunrise;
     const sunsetEpoch = obj.sys.sunset;
     const current = obj.weather[0].description;
@@ -125,29 +127,29 @@ function displayWeather(obj) {
     const minTemp = Math.round(obj.main.temp_min);
 
     // Convert unix time to human readable time
-    const getHRTime = (time, zone) => {
+    const getHRTime = (ut, zone) => {
       // Get date of unix timestamp
       // Convert time (s) to ms
       // Need to convert to ms for Date() constructor
       // Output ex: Tue Oct 18 2022 14:34:05 GMT-0700 (Pacific Daylight Time)
-      let myDate = new Date(time * 1000);
+      const myDate = new Date(ut * 1000);
 
       // Get time since Unix epoch 1/1/70, 00:00:00.000 GMT (in ms)
-      let myTime = myDate.getTime();
+      const myTime = myDate.getTime();
 
       // Get difference between date in UTC time zone and local time zone (in min)
       // Convert min to ms
-      let myOffset = myDate.getTimezoneOffset() * 60000;
+      const myOffset = myDate.getTimezoneOffset() * 60000;
 
       // Get unix timestamp
-      let myUT = myTime + myOffset;
+      const myUT = myTime + myOffset;
 
       // Get target city unix timestamp
       // Convert target timezone seconds to ms and add to myUT
-      let targetCityUT = myUT + 1000 * zone;
+      const targetCityUT = myUT + 1000 * zone;
 
       // Get human readable time
-      let destinTime = new Date(targetCityUT).toLocaleString([], {
+      const destinTime = new Date(targetCityUT).toLocaleString([], {
         hour: 'numeric',
         minute: 'numeric',
       });
@@ -156,7 +158,7 @@ function displayWeather(obj) {
     };
 
     // Find icon for current weather, initialize alt and title text
-    let descrImgCode = obj.weather[0].icon;
+    const descrImgCode = obj.weather[0].icon;
     let img;
     let altText;
     let titleText;
@@ -233,19 +235,19 @@ function displayWeather(obj) {
     timeZone.textContent = ` ${obj.extran.timeZone}`;
     searchBox.value = '';
     errorMsg.style.display = 'none';
-    temp.textContent = Math.round(obj.main.temp) + '°';
+    temp.textContent = `${Math.round(obj.main.temp)}°`;
     descrImg.src = img;
     descrImg.alt = altText;
     descrImg.title = titleText;
     descrText.textContent = current.replace(regexFL, (fl) => fl.toUpperCase());
-    feels.textContent = Math.round(obj.main.feels_like) + '°';
+    feels.textContent = `${Math.round(obj.main.feels_like)}°`;
     sunrise.textContent = getHRTime(sunriseEpoch, timezone);
     sunset.textContent = getHRTime(sunsetEpoch, timezone);
     maxMin.textContent = `${maxTemp}° / ${minTemp}°`;
     windDir.style.transform = `rotate(${obj.wind.deg}deg)`;
     windDir.title = `Wind ${obj.wind.deg} degrees`;
-    humidity.textContent = obj.main.humidity + '%';
-    pressure.textContent = obj.main.pressure + ' hPa';
+    humidity.textContent = `${obj.main.humidity}%`;
+    pressure.textContent = `${obj.main.pressure} hPa`;
 
     stateCountry.textContent = obj.extran.state
       ? `${obj.extran.state}, ${obj.sys.country}`
@@ -253,8 +255,8 @@ function displayWeather(obj) {
 
     wind.textContent =
       obj.extran.units === 'imperial'
-        ? Math.round(obj.wind.speed) + ' mph'
-        : Math.round((obj.wind.speed * 3600) / 1000) + ' km/h';
+        ? `${Math.round(obj.wind.speed)} mph`
+        : `${Math.round((obj.wind.speed * 3600) / 1000)} km/h`;
   }
 }
 
