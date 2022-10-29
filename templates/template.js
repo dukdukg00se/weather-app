@@ -1,3 +1,5 @@
+// Code manually written to test page style and function. Files in the templates dir no longer necessary, however, keep for now as reference and fallback.
+
 'use strict';
 
 const bCD = '../src/assets/images/wallpapers/broken-clouds-d.svg';

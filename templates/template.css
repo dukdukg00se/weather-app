@@ -1,3 +1,5 @@
+/* Code manually written to test page style and function. Files in the templates dir no longer necessary, however, keep for now as reference and fallback. */
+
 * {
   box-sizing: border-box;
 }
@@ -89,7 +91,7 @@ main section {
 
 /* Top arrow  */
 #search-params::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 100%;
   left: 50%;
