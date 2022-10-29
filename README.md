@@ -2,7 +2,7 @@
 
 ## Overview
 
-Get current weather conditions for a given location. Weather data provided by OpenWeather current weather data API. Information displayed:
+Web application detailing current weather conditions for a given location. Weather data provided by OpenWeather current weather data API. Information displayed:
 
 - Data collection time
 - Current temperature
@@ -26,7 +26,7 @@ To retrieve weather information for your desired location please enter either:
 
 [Live Demo]()
 
-<img src="./src/assets/images/screenshot/weather-ui.png" width="45%">
+<img src="./src/assets/images/screenshot/weather-ui.png" width="65%">
 
 ## Learning Objectives
 
