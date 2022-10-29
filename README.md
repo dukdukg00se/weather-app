@@ -24,7 +24,7 @@ To retrieve weather information for your desired location please enter either:
 - City name, country alpha-2 code
 - City name, state abbrev, country alpha-2 code
 
-[Live Demo]()
+[Live Demo](https://dukdukg00se.github.io/weather-app/)
 
 <img src="./src/assets/images/screenshot/weather-ui.png" width="65%">
 
