@@ -22,7 +22,7 @@ To retrieve weather information for your desired location please enter either:
 - 5 digit U.S. zip code
 - City name
 - City name, country alpha-2 code
-- City name, state abbrev, country alpha-2 code
+- City name, state abbreviation, country alpha-2 code
 
 [Live Demo](https://dukdukg00se.github.io/weather-app/)
 
