@@ -1,5 +1,6 @@
 /* eslint-disable default-case, no-return-assign, no-param-reassign */
 
+// Background wallpapers
 import bCD from '../assets/images/wallpapers/broken-clouds-d.svg';
 import bCN from '../assets/images/wallpapers/broken-clouds-n.svg';
 import clearD from '../assets/images/wallpapers/clear-d.svg';
@@ -11,6 +12,26 @@ import rainyD from '../assets/images/wallpapers/rainy-d.svg';
 import rainyN from '../assets/images/wallpapers/rainy-n.svg';
 import snowyD from '../assets/images/wallpapers/snowy-d.svg';
 import snowyN from '../assets/images/wallpapers/snowy-n.svg';
+
+// Icons
+import searchIc from '../assets/images/icons/magnify-glass.svg';
+import sunriseIc from '../assets/images/icons/sunrise-fill.svg';
+import sunsetIc from '../assets/images/icons/sunset-fill.svg';
+import thermometerIc from '../assets/images/icons/thermo.svg';
+import windIc from '../assets/images/icons/wind.svg';
+import arrowIc from '../assets/images/icons/wind-dir.svg';
+import humidityIc from '../assets/images/icons/humidity.svg';
+import pressureIc from '../assets/images/icons/pressure.svg';
+
+import sunIc from '../assets/images/icons/sun.svg';
+import moonIc from '../assets/images/icons/moon.svg';
+import cloudyDIc from '../assets/images/icons/cloudy-day.svg';
+import cloudyNIc from '../assets/images/icons/cloudy-night.svg';
+import cloudyIc from '../assets/images/icons/cloudy.svg';
+import rainyIc from '../assets/images/icons/rainy.svg';
+import ltningIc from '../assets/images/icons/lightning.svg';
+import snowIc from '../assets/images/icons/snow.svg';
+import mistIc from '../assets/images/icons/mist.svg';
 
 // Set wallpaper, background color that matches current weather
 function setTheme(obj) {
@@ -164,22 +185,22 @@ function displayWeather(obj) {
     let titleText;
     switch (descrImgCode) {
       case '01d':
-        img = '../src/assets/images/icons/sun.svg';
+        img = sunIc;
         altText = 'Sun';
         titleText = 'Clear sky';
         break;
       case '01n':
-        img = '../src/assets/images/icons/moon.svg';
+        img = moonIc;
         altText = 'Moon';
         titleText = 'Clear sky';
         break;
       case '02d':
-        img = '../src/assets/images/icons/cloudy-day.svg';
+        img = cloudyDIc;
         altText = 'Sun with clouds';
         titleText = 'Cloudy day';
         break;
       case '02n':
-        img = '../src/assets/images/icons/cloudy-night.svg';
+        img = cloudyNIc;
         altText = 'Moon with clouds';
         titleText = 'Clear night';
         break;
@@ -187,7 +208,7 @@ function displayWeather(obj) {
       case '03n':
       case '04d':
       case '04n':
-        img = '../src/assets/images/icons/cloudy.svg';
+        img = cloudyIc;
         altText = 'Clouds';
         titleText = 'Cloudy skies';
         break;
@@ -195,25 +216,25 @@ function displayWeather(obj) {
       case '09n':
       case '10d':
       case '10n':
-        img = '../src/assets/images/icons/rainy.svg';
+        img = rainyIc;
         altText = 'Cloud and rain';
         titleText = 'Rain';
         break;
       case '11d':
       case '11n':
-        img = '../src/assets/images/icons/lightning.svg';
+        img = ltningIc;
         altText = 'Cloud and lightning';
         titleText = 'Thunderstorm';
         break;
       case '13d':
       case '13n':
-        img = '../src/assets/images/icons/snow.svg';
+        img = snowIc;
         altText = 'Cloud and snow';
         titleText = 'Snow';
         break;
       case '50d':
       case '50n':
-        img = '../src/assets/images/icons/mist.svg';
+        img = mistIc;
         altText = 'Mist';
         titleText = 'Haze';
     }
@@ -259,5 +280,8 @@ function displayWeather(obj) {
         : `${Math.round((obj.wind.speed * 3600) / 1000)} km/h`;
   }
 }
+
+// Set page icons
+function setInfoIcons() {}
 
 export { setTheme, displayWeather };
