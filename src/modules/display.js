@@ -14,15 +14,6 @@ import snowyD from '../assets/images/wallpapers/snowy-d.svg';
 import snowyN from '../assets/images/wallpapers/snowy-n.svg';
 
 // Icons
-import searchIc from '../assets/images/icons/magnify-glass.svg';
-import sunriseIc from '../assets/images/icons/sunrise-fill.svg';
-import sunsetIc from '../assets/images/icons/sunset-fill.svg';
-import thermometerIc from '../assets/images/icons/thermo.svg';
-import windIc from '../assets/images/icons/wind.svg';
-import arrowIc from '../assets/images/icons/wind-dir.svg';
-import humidityIc from '../assets/images/icons/humidity.svg';
-import pressureIc from '../assets/images/icons/pressure.svg';
-
 import sunIc from '../assets/images/icons/sun.svg';
 import moonIc from '../assets/images/icons/moon.svg';
 import cloudyDIc from '../assets/images/icons/cloudy-day.svg';
@@ -280,8 +271,5 @@ function displayWeather(obj) {
         : `${Math.round((obj.wind.speed * 3600) / 1000)} km/h`;
   }
 }
-
-// Set page icons
-function setInfoIcons() {}
 
 export { setTheme, displayWeather };
