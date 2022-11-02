@@ -108,6 +108,7 @@ function displayWeather(obj) {
   const sunset = document.getElementById('sunset');
   const maxMin = document.getElementById('max-min');
   const windDir = document.getElementById('wind-dir');
+  const windDirTitle = document.querySelector('#wind-dir > title');
   const wind = document.getElementById('wind');
   const humidity = document.getElementById('humidity');
   const pressure = document.getElementById('pressure');
@@ -257,7 +258,7 @@ function displayWeather(obj) {
     sunset.textContent = getHRTime(sunsetEpoch, timezone);
     maxMin.textContent = `${maxTemp}° / ${minTemp}°`;
     windDir.style.transform = `rotate(${obj.wind.deg}deg)`;
-    windDir.title = `Wind ${obj.wind.deg} degrees`;
+    windDirTitle.textContent = `Wind ${obj.wind.deg} degrees`;
     humidity.textContent = `${obj.main.humidity}%`;
     pressure.textContent = `${obj.main.pressure} hPa`;
 
