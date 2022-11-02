@@ -2,7 +2,7 @@
 
 ## Overview
 
-Web application detailing current weather conditions for a given location. Weather data provided by OpenWeather current weather data API. Information displayed:
+Web application detailing current weather conditions for a given location. Weather data provided by OpenWeather current weather data API. Information provided:
 
 - Data collection time
 - Current temperature
