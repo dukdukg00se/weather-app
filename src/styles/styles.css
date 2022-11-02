@@ -129,17 +129,6 @@ main section {
   cursor: pointer;
 }
 
-/* #search-wrapper > img {
-  height: 2.2rem;
-  width: auto;
-  position: absolute;
-  right: 1rem;
-}
-
-#search-wrapper > img:hover {
-  cursor: pointer;
-} */
-
 #units-wrapper {
   display: flex;
   gap: 0.6rem;
@@ -332,6 +321,7 @@ label[for='search-input'] {
 .sun-icon {
   height: 3.2rem;
   width: auto;
+  margin-bottom: -0.1rem;
 }
 
 /* .sun-icon {
@@ -350,7 +340,7 @@ label[for='search-input'] {
   gap: 1rem;
   padding: 1rem 0;
   border-top: solid;
-  height: 52px;
+  height: 5.2rem;
 }
 
 #det-body-bottom li:last-of-type {
@@ -360,11 +350,6 @@ label[for='search-input'] {
 .weather-icon {
   height: auto;
   width: 2.5rem;
-}
-
-.weather-icon:last-of-type {
-  height: 3.2rem;
-  width: 3rem;
 }
 
 .li-descr {
@@ -381,7 +366,7 @@ label[for='search-input'] {
   margin-left: 0.3rem;
 }
 
-@media (max-width: 475px), (max-height: 650px) {
+@media (max-width: 475px), (max-height: 670px) {
   html {
     font-size: 50%;
   }
