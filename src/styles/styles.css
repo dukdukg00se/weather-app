@@ -118,7 +118,18 @@ main section {
   min-width: 12rem;
 }
 
-#search-wrapper > img {
+#search {
+  height: 2.2rem;
+  width: auto;
+  position: absolute;
+  right: 1rem;
+}
+
+#search:hover {
+  cursor: pointer;
+}
+
+/* #search-wrapper > img {
   height: 2.2rem;
   width: auto;
   position: absolute;
@@ -127,7 +138,7 @@ main section {
 
 #search-wrapper > img:hover {
   cursor: pointer;
-}
+} */
 
 #units-wrapper {
   display: flex;
@@ -321,11 +332,16 @@ label[for='search-input'] {
 .sun-icon {
   height: 3.2rem;
   width: auto;
-  margin-bottom: -0.6rem;
 }
 
+/* .sun-icon {
+  height: 3.2rem;
+  width: auto;
+  margin-bottom: -0.6rem;
+} */
+
 #det-body-bottom {
-  padding: 0 2rem 2rem;
+  padding: 0 2rem 1rem;
 }
 
 #det-body-bottom li {
@@ -334,6 +350,7 @@ label[for='search-input'] {
   gap: 1rem;
   padding: 1rem 0;
   border-top: solid;
+  height: 52px;
 }
 
 #det-body-bottom li:last-of-type {
@@ -345,15 +362,23 @@ label[for='search-input'] {
   width: 2.5rem;
 }
 
+.weather-icon:last-of-type {
+  height: 3.2rem;
+  width: 3rem;
+}
+
 .li-descr {
   flex-grow: 1;
   min-width: 55%;
 }
 
 #wind-dir {
-  height: 1.6rem;
-  width: 1.2rem;
-  margin: 0 0.3rem -0.1rem 0;
+  width: 1.8rem;
+  margin-bottom: -0.1rem;
+}
+
+#wind {
+  margin-left: 0.3rem;
 }
 
 @media (max-width: 475px), (max-height: 650px) {
