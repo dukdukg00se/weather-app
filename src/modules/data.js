@@ -88,7 +88,9 @@ async function getWeather(area = 90210, dispUnits = 'imperial') {
     weatherInfo.extran.units = dispUnits;
 
     return weatherInfo;
-  } catch {
+  } catch (error) {
+    console.log(error);
+    // throw new Error(error);
     return false;
   }
 }
