@@ -196,9 +196,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(11px);
-  -ms-transform: translateX(11px);
-  transform: translateX(11px);
+  -webkit-transform: translateX(1.1rem);
+  -ms-transform: translateX(1.1rem);
+  transform: translateX(1.1rem);
 }
 
 h1 {
@@ -328,12 +328,6 @@ label[for='search-input'] {
   width: auto;
   margin-bottom: -0.1rem;
 }
-
-/* .sun-icon {
-  height: 3.2rem;
-  width: auto;
-  margin-bottom: -0.6rem;
-} */
 
 #det-body-bottom {
   padding: 0 2rem 1rem;
