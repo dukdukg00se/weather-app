@@ -21,11 +21,16 @@ html {
 }
 
 body {
-  /* background-size: cover;
+  /* background-blend-mode: multiply; */
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-blend-mode: multiply; */
-  background: no-repeat center/cover;
+  /* Shorthand not working with iOS */
+  /* background: no-repeat center/cover; */
+  /* Below breaks background img on iOS, use background-attachment */
+  /* contain: content; */
+  /* Set to fixed; prevents cropping of image when shrinking page */
+  background-attachment: fixed;
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;
@@ -33,7 +38,7 @@ body {
   align-items: center;
   color: var(--light-text);
   font-family: sans-serif;
-  contain: content;
+  padding: 3% 0;
   min-width: 275px;
   min-height: 100vh;
 }
