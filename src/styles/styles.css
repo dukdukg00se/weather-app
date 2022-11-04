@@ -31,6 +31,7 @@ body {
   /* contain: content; */
   /* Set to fixed; prevents cropping of image when shrinking page */
   background-attachment: fixed;
+  background-color: var(--snowy-day);
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;
