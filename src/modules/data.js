@@ -11,7 +11,8 @@ function logParams(obj) {
 }
 
 // Returns obj with weather info for given area
-// If error - returns false
+// If area not found - return not found
+// If other error - return false
 async function getWeather(area = 90210, dispUnits = 'imperial') {
   const isZip = /\d/g.test(area);
   const query = isZip ? 'zip' : 'q';
@@ -39,7 +40,7 @@ async function getWeather(area = 90210, dispUnits = 'imperial') {
   });
 
   try {
-    // Instead of passing URL string, mode option to fetch request
+    // Instead of passing URL string and mode option to fetch request
     // Use Request constructor to create new Request obj
     // Pass Request obj to fetch w/ default options (e.g. mode: 'cors')
     // Get weather info - doesn't include state, time zone abbr
@@ -49,6 +50,13 @@ async function getWeather(area = 90210, dispUnits = 'imperial') {
 
     const weatherResponse = await fetch(weatherRequest);
     const weatherInfo = filterData(await weatherResponse.json());
+
+    if (!weatherResponse.ok) {
+      throw new Error(weatherResponse.status);
+
+      // Could also just throw status
+      // throw weatherResponse.status;
+    }
 
     // Get state name using second api call, limit responses to 1
     // Need to call openweather reverse geocoding api for state name
@@ -84,13 +92,17 @@ async function getWeather(area = 90210, dispUnits = 'imperial') {
         // Same as above
         return { state, timeZone };
       });
+
     weatherInfo.extran.search = area;
     weatherInfo.extran.units = dispUnits;
 
     return weatherInfo;
   } catch (error) {
-    console.log(error);
-    // throw new Error(error);
+    if (error.message === '404') {
+      // console.error('Location not found, check search parameters');
+      return 'not found';
+    }
+
     return false;
   }
 }
