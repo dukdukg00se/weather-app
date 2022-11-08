@@ -31,7 +31,7 @@ body {
   /* contain: content; */
   /* Set to fixed; prevents cropping of image when shrinking page */
   background-attachment: fixed;
-  background-color: var(--snowy-day);
+  background-image: url(../assets/images/wallpapers/cloudy-d.svg);
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;
@@ -364,6 +364,33 @@ label[for='search-input'] {
 
 #wind {
   margin-left: 0.3rem;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 200, 'opsz' 48;
+}
+
+body > div {
+  width: 60%;
+  max-width: 44rem;
+  display: none;
+  border-radius: 5px;
+  background-color: #0879a7;
+  padding: 3rem;
+  font-size: 2.4rem;
+  /* display: flex; */
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  color: #f3f9fd;
+}
+
+#start-err-icon {
+  font-size: 10rem;
+}
+
+body > div > p {
+  text-align: center;
 }
 
 @media (max-width: 475px), (max-height: 670px) {
