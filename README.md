@@ -2,7 +2,7 @@
 
 ## Overview
 
-Web application detailing current weather conditions for a given location. Weather data provided by OpenWeather current weather data API. Information provided:
+A web application detailing current weather conditions for a given location. Weather data provided by OpenWeather current weather data API. Information provided:
 
 - Data collection time
 - Current temperature
@@ -27,6 +27,10 @@ To retrieve weather information for your desired location please enter either:
 [Live Demo](https://dukdukg00se.github.io/weather-app/)
 
 <img src="./src/assets/images/screenshot/weather-ui.png" width="65%">
+
+## Notes
+
+To determine correct timezone the TimeZoneDB RESTful API was used. This occasionally returns a CORS error that eventually resolves itself. If this error occurs the page will display an error and users will have to try again at a later time. I apologize for this and may look into alternatives in the future. Another option would be to use the OpenWeather One Call API, however, this would require adding payment information.
 
 ## Learning Objectives
 
