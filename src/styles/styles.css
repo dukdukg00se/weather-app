@@ -184,7 +184,7 @@ main section {
   bottom: 0.2rem;
   background-color: var(--dark-bkgrnd);
   -webkit-transition: 0.4s;
-  transition: 0.4s;
+  transition: 0.2s;
   border-radius: 2px;
 }
 
