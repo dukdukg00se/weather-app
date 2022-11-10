@@ -103,7 +103,7 @@ async function getWeather(area = 90210, dispUnits = 'imperial') {
     // Get state name using second api call, limit responses to 1
     // Need to call openweather reverse geocoding api for state name
     // Current weather api only contains city name, country
-    let nameRequest = new Request(
+    let stateRequest = new Request(
       `https://api.openweathermap.org/geo/1.0/reverse?lat=${weatherInfo.coord.lat}&lon=${weatherInfo.coord.lon}&limit=1&appid=0aea211463138f620add488578423899`
     );
 
@@ -114,7 +114,7 @@ async function getWeather(area = 90210, dispUnits = 'imperial') {
     );
 
     weatherInfo.extran = await Promise.all([
-      fetch(nameRequest),
+      fetch(stateRequest),
       fetch(tmZoneRequest),
     ])
       .then((responses) => {
