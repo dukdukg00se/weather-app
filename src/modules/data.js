@@ -61,18 +61,17 @@ async function getWeather(area = 90210, dispUnits = 'imperial') {
     // Get state name using second api call, limit responses to 1
     // Need to call openweather reverse geocoding api for state name
     // Current weather api only contains city name, country
-    const nameRequest = new Request(
+    const stateRequest = new Request(
       `https://api.openweathermap.org/geo/1.0/reverse?lat=${weatherInfo.coord.lat}&lon=${weatherInfo.coord.lon}&limit=1&appid=0aea211463138f620add488578423899`
     );
 
     // Use TimeZoneDB RESTful API to get timezone abbreviation
-    // Open Weather OneCall API requires CC info
     const tmZoneRequest = new Request(
       `https://api.timezonedb.com/v2.1/get-time-zone?key=P0O68OWY0HTK&format=json&by=position&lat=${weatherInfo.coord.lat}&lng=${weatherInfo.coord.lon}`
     );
 
     weatherInfo.extran = await Promise.all([
-      fetch(nameRequest),
+      fetch(stateRequest),
       fetch(tmZoneRequest),
     ])
       .then((responses) =>
@@ -93,13 +92,18 @@ async function getWeather(area = 90210, dispUnits = 'imperial') {
         return { state, timeZone };
       });
 
+    // TimeZoneDB API occasionally returns CORS error
+    // By commenting out fetch request above and using code below
+    // will return weatherInfo object so that other features can still be worked on
+    // weatherInfo.extran = {};
+    // const stateResp = await fetch(stateRequest);
+
     weatherInfo.extran.search = area;
     weatherInfo.extran.units = dispUnits;
 
     return weatherInfo;
   } catch (error) {
     if (error.message === '404') {
-      // console.error('Location not found, check search parameters');
       return 'not found';
     }
 
