@@ -26,7 +26,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Weather App',
       template: './src/template.html',
-      favicon: './src/assets/images/icons/cloudy-day.svg',
     }),
   ],
 };
